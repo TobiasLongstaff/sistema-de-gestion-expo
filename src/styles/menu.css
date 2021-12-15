@@ -1,0 +1,42 @@
+.container-menu
+{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-general-menu
+{
+    border-radius: 10px;
+    border: none;
+    background-color: var(--fondo1);
+    color: var(--font);
+    padding: 20px;
+    width: 200px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.container-header-nav
+{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-height: 70px;
+}
+
+.btn-nav-general-volver
+{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    background-color: var(--principal);
+    border-radius: 5px;
+    border: none;
+    color: var(--font);
+    font-family: 'Nunito';
+    padding-right: 20px;
+    cursor: pointer;
+}

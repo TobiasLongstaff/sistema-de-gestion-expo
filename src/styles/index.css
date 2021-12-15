@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+
+/* :root
+{
+    --fondo2: #292C6D;
+    --fondo1: #161853;
+    --principal: #EC255A;
+    --font: #FAEDF0;
+    --verde: #badc58;
+    --delay: 0s;
+} */
+
+:root
+{
+    --fondo2: #393E46;
+    --fondo1: #222831;
+    --principal: #00ADB5;
+    --font: #EEEEEE;
+    --verde: #badc58;
+    --delay: 0s;
+}
+
+body 
+{
+    margin: 0;
+    font-family: 'Nunito';
+    color: var(--font);
+}
+
+a
+{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.textbox-genegal
+{
+    border: none;
+    background-color: var(--fondo2);
+    border-radius: 5px;
+    padding: 7px 10px;
+    color: var(--font);
+    font-family: 'Nunito';
+    font-size: 1rem;
+}
+
+.textbox-genegal::placeholder
+{
+    color: var(--font);
+}
+
+.btn-general
+{
+    border-radius: 5px;
+    padding: 7px 10px;
+    border: none;
+    color: var(--font);
+    font-family: 'Nunito';
+    font-size: 1rem;
+    background-color: var(--fondo2);
+    cursor: pointer;
+}
+
+.btn-primario
+{
+    background-color: var(--principal)
+}
+
+.text-error
+{
+    color: var(--principal);
+}
