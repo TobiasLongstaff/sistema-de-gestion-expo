@@ -1,0 +1,20 @@
+
+.form-pedidos
+{
+    box-sizing: border-box;
+    padding: 5%;
+    display: grid;
+    gap: 17px;
+}
+
+.container-textbox-pedidos
+{
+    display: flex;
+    gap: 17px;
+}
+
+.container-btn-enviar
+{
+    display: flex;
+    justify-content: flex-end;
+}

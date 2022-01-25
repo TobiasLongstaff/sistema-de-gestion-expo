@@ -5,6 +5,7 @@ import Registro from '../pages/Registro'
 import Menu from '../pages/Menu'
 import Pedidos from '../pages/Pedidos'
 import Reclamos from '../pages/Reclamos'
+import Clientes from '../pages/Clientes'
 
 function Rutas()
 {
@@ -16,6 +17,7 @@ function Rutas()
                 <Route exact path="/menu" element={<Menu/>}/>
                 <Route exact path="/pedidos" element={<Pedidos/>}/>
                 <Route exact path="/reclamos" element={<Reclamos/>}/>
+                <Route exact path="/clientes" element={<Clientes/>}/>
             </Routes>
         </BrowserRouter>
     )

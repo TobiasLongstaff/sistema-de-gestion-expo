@@ -81,7 +81,7 @@ const Login = () =>
                     <div className="container-btn">
                         <button type="submit" className="btn-primario btn-general">Iniciar sesión</button>
                         <Link to="/registrarse">
-                            <button type="button" className=" btn-general">Crear cuenta</button>
+                            <button type="button" className="btn-general">Crear cuenta</button>
                         </Link>                    
                     </div>
                 </form>

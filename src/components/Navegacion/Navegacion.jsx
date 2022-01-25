@@ -21,7 +21,7 @@ const Navigation = ({texto, volver}) =>
             setVolver(
                 <Link to={volver}>
                     <button className="btn-nav-general-volver">
-                        <UilAngleLeft size="32"/>Volver
+                        <UilAngleLeft size="32"/>
                     </button>
                 </Link>
             )
