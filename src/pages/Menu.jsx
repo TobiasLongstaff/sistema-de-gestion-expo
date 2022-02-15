@@ -24,6 +24,11 @@ const Menu = () =>
                         ABM Clientes
                     </button>
                 </Link>
+                <Link to="/colores">
+                    <button type="button" className="btn-general-menu">
+                        ABM Colores
+                    </button>
+                </Link>
             </main>
         </article>
     )

@@ -9,10 +9,15 @@ const cookies = new Cookies
 
 const Clientes = () =>
 {
-    const [ form, setForm ] = useState({ nombre_apellido: '', id_usuario: cookies.get('IdSession') }) 
+    const [ form, setForm ] = useState({ nombre_apellido: '', id_usuario: cookies.get('IdSession'), id_cliente: '' }) 
     const [ MensajeError, setError ] = useState(null)
     const [ data, setData ] = useState([])
     const [ loading, setLoading ] = useState(true)
+    const [ btn_value, setBtn ] = useState('Crear')
+    const [ btnForm, setBtnForm] = useState('var(--principal)')
+    const [ data_usuarios, setDataUsuarios] = useState([])
+
+    let editar = false
 
     useEffect(() =>
     {
@@ -25,9 +30,13 @@ const Clientes = () =>
         {
             let res = await fetch(url+'obtener-clientes.php')
             let datos = await res.json()
-            if(typeof datos !== 'undefined')
+            let res_usuarios = await fetch(url+'obtener-usuarios.php')
+            let datos_usuarios = await res_usuarios.json()
+            
+            if(typeof datos !== 'undefined' && typeof datos_usuarios !== 'undefined')
             {
                 setData(datos)
+                setDataUsuarios(datos_usuarios)
                 setLoading(false)
             }
         }
@@ -40,6 +49,8 @@ const Clientes = () =>
     const handelSubmit = async e =>
     {
         e.preventDefault();
+        let url_cliente = editar === false ? 'editar-cliente.php' : 'crear-cliente.php';
+
         try
         {
             let config =
@@ -52,15 +63,23 @@ const Clientes = () =>
                 },
                 body: JSON.stringify(form)
             }
-            let res = await fetch(url+'crear-cliente.php', config)
+            let res = await fetch(url+url_cliente, config)
             let infoPost = await res.json()
             console.log(infoPost[0])
             if(infoPost[0].error == 0)
             {
                 setError('')
+                setBtnForm('var(--principal)')
+                setBtn('Crear')
+                setForm(
+                {
+                    nombre_apellido: '',
+                    id_usuario: '',
+                    id_cliente: ''
+                })
                 Swal.fire(
-                    'Cliente creado!',
                     'Operacion realizada correctamente',
+                    '',
                     'success'
                 )
                 obtenerClientes()
@@ -147,9 +166,31 @@ const Clientes = () =>
         }
     }
 
-    const handelEditar = () => 
+    const handelEditar = async (id_fila) =>
     {
-        
+        editar = true
+        setBtnForm('var(--verde)')
+        try
+        {
+            let res = await fetch(url+'obtener-clientes.php?id='+id_fila)
+            let datos = await res.json()
+            if(typeof datos !== 'undefined')
+            {
+                console.log(datos[0].usuario)
+                setForm(
+                {
+                    nombre_apellido: datos[0].nombre_apellido,
+                    id_usuario: datos[0].usuario,
+                    id_cliente: id_fila
+                })
+                console.log(form)
+                setBtn('Editar')
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
     }
 
     if(!loading)
@@ -160,11 +201,18 @@ const Clientes = () =>
                     <form className="container-form-abm container-login" onSubmit={handelSubmit}>
                         <h2>Agregar Cliente</h2>
                         <div className="container-textbox">
-                            <input type="text" className="textbox-genegal" name="nombre_apellido" onChange={handelChange} required/>
+                            <input type="text" value={form.nombre_apellido}  className="textbox-genegal" name="nombre_apellido" onChange={handelChange} required/>
                             <label>Nombre y Apellido</label>
                         </div>
+                        <select value={form.id_usuario} className="select-general">
+                            <option disabled>Usuario</option>
+                            {data_usuarios.map((fila_usuarios) =>
+                            (
+                                <option key={fila_usuarios.id} value={fila_usuarios.id}>{fila_usuarios.nombre}</option>
+                            ))}
+                        </select>
                         <label className="text-error">{MensajeError}</label>
-                        <input type="submit" value="Crear" className="btn-primario btn-general"/>
+                        <input type="submit" style={{ background: btnForm}} value={btn_value} className="btn-primario btn-general"/>
                     </form>
                     <div className="container-tabla">
                         <div className="tbl-header">
@@ -173,20 +221,20 @@ const Clientes = () =>
                                     <tr>
                                         <th>
                                             <span>Nombre y Apellido</span>
-                                        </th>     
+                                        </th>
                                         <th>
                                             <span>Usuario</span>
-                                        </th>  
+                                        </th> 
                                         <th>
                                             <span>Controles</span>   
                                         </th>
-                                    </tr> 
+                                    </tr>
                                 </thead>
-                            </table>  
+                            </table>
                         </div> 
                         <div className="tbl-content">
-                            <table>    
-                                <tbody> 
+                            <table>
+                                <tbody>
                                     {data.map((fila) =>
                                     (
                                         <tr key={fila.id}>

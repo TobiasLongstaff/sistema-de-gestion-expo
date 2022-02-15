@@ -54,6 +54,7 @@ h2
     box-sizing: border-box;
     outline-color: var(--principal);
     height: 39px;
+    width: 100%;
 }
 
 .textbox-genegal::placeholder
@@ -64,6 +65,21 @@ h2
 .textarea-general
 {
     height: 80px;
+}
+
+.select-general
+{
+    border: none;
+    background-color: var(--fondo2);
+    border-radius: 5px;
+    padding: 10px 12px;
+    color: var(--font);
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    box-sizing: border-box;
+    outline-color: var(--principal);
+    height: 39px;
+    width: 100%;
 }
 
 .btn-general

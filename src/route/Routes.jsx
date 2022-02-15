@@ -6,6 +6,7 @@ import Menu from '../pages/Menu'
 import Pedidos from '../pages/Pedidos'
 import Reclamos from '../pages/Reclamos'
 import Clientes from '../pages/Clientes'
+import Colores from '../pages/Colores'
 
 function Rutas()
 {
@@ -18,6 +19,7 @@ function Rutas()
                 <Route exact path="/pedidos" element={<Pedidos/>}/>
                 <Route exact path="/reclamos" element={<Reclamos/>}/>
                 <Route exact path="/clientes" element={<Clientes/>}/>
+                <Route exact path="/colores" element={<Colores/>}/>
             </Routes>
         </BrowserRouter>
     )

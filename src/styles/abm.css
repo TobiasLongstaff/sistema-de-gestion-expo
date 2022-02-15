@@ -1,7 +1,15 @@
 .container-form-abm
 {
     display: grid;
+    gap: 10px;
+}
 
+.container-colores
+{
+    gap: 40px;
+    width: 100%;
+    padding: 30px;
+    box-sizing: border-box 
 }
 
 .container-abm
