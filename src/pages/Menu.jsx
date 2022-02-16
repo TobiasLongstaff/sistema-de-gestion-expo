@@ -19,6 +19,11 @@ const Menu = () =>
                         Reclamos
                     </button>
                 </Link>
+                <Link to="/seguimiento-de-pedidos">
+                    <button type="button" className="btn-general-menu">
+                        Seguimiento de pedidos
+                    </button>
+                </Link>
                 <Link to="/clientes">
                     <button type="button" className="btn-general-menu">
                         ABM Clientes

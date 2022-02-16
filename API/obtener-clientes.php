@@ -13,8 +13,21 @@
         }
         else
         {
-            $sql="SELECT clientes.nombre_apellido AS nombre_cliente, clientes.id, usuarios.nombre_apellido 
-            AS nombre_usuario FROM clientes INNER JOIN usuarios ON clientes.id_usuario = usuarios.id";
+            if(isset($_GET['nombre']) && isset($_GET['id_usuario']))
+            {
+                $id_usuario = $_GET['id_usuario'];
+                $nombre_apellido = $_GET['nombre'];
+
+                $sql="SELECT id, nombre_apellido AS nombre_cliente, id_usuario AS 
+                nombre_usuario from clientes WHERE id_usuario = '$id_usuario' AND 
+                nombre_apellido LIKE '%".$nombre_apellido."%'"; 
+            }
+            else
+            {
+                $sql="SELECT clientes.nombre_apellido AS nombre_cliente, clientes.id, usuarios.nombre_apellido 
+                AS nombre_usuario FROM clientes INNER JOIN usuarios ON clientes.id_usuario = usuarios.id";                
+            }
+
         }
         $resultado=mysqli_query($conexion,$sql);
         $json = array();

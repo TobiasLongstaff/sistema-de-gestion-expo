@@ -7,6 +7,7 @@ import Pedidos from '../pages/Pedidos'
 import Reclamos from '../pages/Reclamos'
 import Clientes from '../pages/Clientes'
 import Colores from '../pages/Colores'
+import SeguimientoPedidos from '../pages/SeguimientoPedidos'
 
 function Rutas()
 {
@@ -20,6 +21,7 @@ function Rutas()
                 <Route exact path="/reclamos" element={<Reclamos/>}/>
                 <Route exact path="/clientes" element={<Clientes/>}/>
                 <Route exact path="/colores" element={<Colores/>}/>
+                <Route exact path="/seguimiento-de-pedidos" element={<SeguimientoPedidos/>}/>
             </Routes>
         </BrowserRouter>
     )
