@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navigation from '../components/Navegacion/Navegacion'
 import '../styles/pedidos.css'
-import { UilSearch } from '@iconscout/react-unicons'
+import { UilSearch, UilEye } from '@iconscout/react-unicons'
 import url from '../services/Settings'
 import Cookies from 'universal-cookie'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
@@ -25,6 +25,30 @@ const Pedidos = () =>
     })
     const [ activoCliente, setActivo ] = useState('container-clientes')
     const [ activoCategoria, setActivoCategoria] = useState('container-categorias')
+    const [ infoCategoria, setdataCategoriaComp] = useState([0])
+    // {
+    //     id: '',
+    //     color: '',
+    //     clasificacion: '',
+    //     id_calibre: '',
+    //     pje_max: '',
+    //     pje_min: '',
+    //     id_raza: '',
+    //     id_tipo_animal: '',
+    //     id_denticion: '',
+    //     id_grasa: '',
+    //     id_cobertura: '',
+    //     id_osificacion: '',
+    //     id_evaluacion_corte: '',
+    //     id_color_grasa: '',
+    //     id_color_carne: '',
+    //     id_marmoreado: '',
+    //     ph: '',
+    //     gi: ''
+    // })
+
+    const [ dataCalibre, setDataCalibre ] = useState([])
+    const [ dataRaza, setDataRaza ] = useState([])
 
     useEffect(() =>
     {
@@ -159,6 +183,64 @@ const Pedidos = () =>
             categorias: nombre,
             id_categoria: id
         })
+
+        obtenerCategoriaCompleta(id)
+        obtenerCalibre(id)
+        obtenerRaza(id)
+    }
+
+    const obtenerCategoriaCompleta = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-categorias-completa.php?id=' + id)
+            let dataCategoriaComp = await res.json()
+            
+            if(typeof dataCategoriaComp !== 'undefined')
+            {
+                setdataCategoriaComp(dataCategoriaComp)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerCalibre = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-calibre.php?id=' + id)
+            let dataCalibre = await res.json()
+            
+            if(typeof dataCalibre !== 'undefined')
+            {
+                setDataCalibre(dataCalibre)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerRaza = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-raza.php?id=' + id)
+            let dataRaza = await res.json()
+            
+            if(typeof dataRaza !== 'undefined')
+            {
+                setDataRaza(dataRaza)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
     }
 
     const mostrarClientes = () =>
@@ -214,7 +296,7 @@ const Pedidos = () =>
                     </div>
                     <div>
                         <div className="form-group">
-                            <input type="search"className="textbox-genegal textbox-buscar" autoComplete="off" name="categorias" onClick={mostrarCategorias} onChange={handelChangeCliente} onClick={mostrarCategorias} onChange={handelChangeCliente} onBlur={fueraDeFoco} value={form.categorias} placeholder="Categoria de seguimiento" required/>
+                            <input type="search"className="textbox-genegal textbox-buscar" autoComplete="off" name="categorias" onClick={mostrarCategorias} onChange={handelChangeCliente} onBlur={fueraDeFoco} value={form.categorias} placeholder="Categoria de seguimiento" required/>
                             <UilSearch size="20" className="input-icon"/>
                         </div>
                         <div className={activoCategoria}>
@@ -224,10 +306,39 @@ const Pedidos = () =>
                             ))}
                         </div>  
                     </div>
+                        <div className="container-info-categorias">
+                            <button><UilEye size="20"/></button>
+                            <div className="container-info-general">
+                                <label>Color: {infoCategoria[0].color}</label>
+                                <label>Clasificacion: {infoCategoria[0].clasificacion}</label>
+                                <label>Pje Max: {infoCategoria[0].pje_max}</label>
+                                <label>Pje Min: {infoCategoria[0].pje_min}</label>
+                                <label>PH: {infoCategoria[0].ph}</label>
+                                <label>GI: {infoCategoria[0].gi}</label>
+                            </div>
+                            <div className="container-info-general">
+                                <h4>Calibres</h4>
+                                {dataCalibre.map((filaCalibre) =>
+                                (
+                                    <label key={filaCalibre.peso}>{filaCalibre.peso}</label>
+                                ))}
+                            </div>
+                            <div className="container-info-general">
+                                <h4>Razas</h4>
+                                {dataRaza.map((filaRaza) =>
+                                (
+                                    <label key={filaRaza.nombre}>{filaRaza.nombre}</label>
+                                ))}
+                            </div>                             
+                        </div>
                     <div className="container-textbox-pedidos">
                         <div className="container-textbox">
                             <textarea cols="30" rows="5" name="descripcion" onChange={handelChangeCliente} className="textbox-genegal textarea-general" required></textarea>
                             <label>Descripcion del producto</label>
+                        </div>
+                        <div className="container-textbox">
+                            <input type="text" className="textbox-genegal" name="localidad" onChange={handelChangeCliente} required/>
+                            <label>Localidad</label>
                         </div>
                         <div className="container-textbox">
                             <input type="text" className="textbox-genegal" name="cantidad" onChange={handelChangeCliente} required/>
