@@ -11,8 +11,8 @@
             $id = $_GET['id'];
             $sql="SELECT razas.nombre FROM categoria
             INNER JOIN clasificacion ON categoria.id_clasificacion = clasificacion.id
-            INNER JOIN color_raza ON categoria.id_color = color_raza.id
-            INNER JOIN razas ON color_raza.id_raza = razas.nombre
+            INNER JOIN color_raza ON categoria.id_color = color_raza.id_color
+            INNER JOIN razas ON color_raza.id_raza = razas.id
             WHERE categoria.id = '$id'";
             $resultado=mysqli_query($conexion,$sql);
             $json = array();

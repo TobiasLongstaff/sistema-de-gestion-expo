@@ -49,6 +49,15 @@ const Pedidos = () =>
 
     const [ dataCalibre, setDataCalibre ] = useState([])
     const [ dataRaza, setDataRaza ] = useState([])
+    const [ dataTipoAnimal, setDataTipoAnimal] = useState([])
+    const [ dataDenticion, setDataDenticion] = useState([])
+    const [ dataGrasa, setDataGrasa] = useState([])
+    const [ dataCobertura, setDataCobertura] = useState([])
+    const [ dataOsificacion, setDataOsificacion] = useState([])
+    const [ dataEvaluacionCorte, setDataEvaluacionCorte] = useState([])
+    const [ dataColorGrasa, setDataColorGrasa] = useState([])
+    const [ dataColorCarne, setDataColorCarne] = useState([])
+    const [ dataMarmoreado, setDataMarmoreado] = useState([])
 
     useEffect(() =>
     {
@@ -187,6 +196,15 @@ const Pedidos = () =>
         obtenerCategoriaCompleta(id)
         obtenerCalibre(id)
         obtenerRaza(id)
+        obtenerTipoAnimal(id)
+        obtenerDenticion(id)
+        obtenerGrasa(id)
+        obtenerCobertura(id)
+        obtenerOsificacion(id)
+        obtenerEvaluacionCorte(id)
+        obtenerColorGrasa(id)
+        obtenerColorCarne(id)
+        obtenerMarmoreado(id)
     }
 
     const obtenerCategoriaCompleta = async (id) =>
@@ -235,6 +253,168 @@ const Pedidos = () =>
             if(typeof dataRaza !== 'undefined')
             {
                 setDataRaza(dataRaza)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerTipoAnimal = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-tipo-animal.php?id=' + id)
+            let dataTipoAnimal = await res.json()
+            
+            if(typeof dataTipoAnimal !== 'undefined')
+            {
+                setDataTipoAnimal(dataTipoAnimal)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerDenticion = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-denticion.php?id=' + id)
+            let dataDenticion = await res.json()
+            
+            if(typeof dataDenticion !== 'undefined')
+            {
+                setDataDenticion(dataDenticion)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerGrasa = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-grasa.php?id=' + id)
+            let dataGrasa = await res.json()
+            
+            if(typeof dataGrasa !== 'undefined')
+            {
+                setDataGrasa(dataGrasa)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerCobertura = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-cobertura.php?id=' + id)
+            let dataCobertura = await res.json()
+            
+            if(typeof dataCobertura !== 'undefined')
+            {
+                setDataCobertura(dataCobertura)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerOsificacion = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-osificacion.php?id=' + id)
+            let dataOsificacion = await res.json()
+            
+            if(typeof dataOsificacion !== 'undefined')
+            {
+                setDataOsificacion(dataOsificacion)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerEvaluacionCorte = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-evaluacion-corte.php?id=' + id)
+            let dataEvaluacionCorte = await res.json()
+            
+            if(typeof dataEvaluacionCorte !== 'undefined')
+            {
+                setDataEvaluacionCorte(dataEvaluacionCorte)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerColorGrasa = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-color-grasa.php?id=' + id)
+            let dataColorGrasa = await res.json()
+            
+            if(typeof dataColorGrasa !== 'undefined')
+            {
+                setDataColorGrasa(dataColorGrasa)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerColorCarne = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-color-carne.php?id=' + id)
+            let dataColorCarne = await res.json()
+            
+            if(typeof dataColorCarne !== 'undefined')
+            {
+                setDataColorCarne(dataColorCarne)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const obtenerMarmoreado = async (id) =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-marmoreado.php?id=' + id)
+            let dataMarmoreado = await res.json()
+            
+            if(typeof dataMarmoreado !== 'undefined')
+            {
+                setDataMarmoreado(dataMarmoreado)
             }
         }
         catch(error)
@@ -307,7 +487,7 @@ const Pedidos = () =>
                         </div>  
                     </div>
                         <div className="container-info-categorias">
-                            <button><UilEye size="20"/></button>
+                            {/* <button><UilEye size="20"/></button> */}
                             <div className="container-info-general">
                                 <label>Color: {infoCategoria[0].color}</label>
                                 <label>Clasificacion: {infoCategoria[0].clasificacion}</label>
@@ -329,7 +509,71 @@ const Pedidos = () =>
                                 (
                                     <label key={filaRaza.nombre}>{filaRaza.nombre}</label>
                                 ))}
-                            </div>                             
+                            </div>     
+                            <div className="container-info-general">
+                                <h4>Tipo Animal</h4>
+                                {dataTipoAnimal.map((filaTipoAnimal) =>
+                                (
+                                    <label key={filaTipoAnimal.tipo}>{filaTipoAnimal.tipo}</label>
+                                ))}
+                            </div>    
+                            <div className="container-info-general">
+                                <h4>Denticion</h4>
+                                {dataDenticion.map((filaDenticion) =>
+                                (
+                                    <label key={filaDenticion.denticion}>{filaDenticion.denticion}</label>
+                                ))}
+                            </div>    
+                            <div className="container-info-general">
+                                <h4>Grasa</h4>
+                                {dataGrasa.map((filaGrasa) =>
+                                (
+                                    <label key={filaGrasa.numero}>{filaGrasa.numero}</label>
+                                ))}
+                            </div>
+                            <div className="container-info-general">
+                                <h4>Cobertura</h4>
+                                {dataCobertura.map((filaCobertura) =>
+                                (
+                                    <label key={filaCobertura.cobertura}>{filaCobertura.cobertura}</label>
+                                ))}
+                            </div>      
+                            <div className="container-info-general">
+                                <h4>Osificacion</h4>
+                                {dataOsificacion.map((filaOsificacion) =>
+                                (
+                                    <label key={filaOsificacion.letra}>{filaOsificacion.letra}</label>
+                                ))}
+                            </div>  
+                            <div className="container-info-general">
+                                <h4>Evaluacion De Corte</h4>
+                                {dataEvaluacionCorte.map((filaEvaluacionCorte) =>
+                                (
+                                    <label key={filaEvaluacionCorte.evaluacion}>{filaEvaluacionCorte.evaluacion}</label>
+                                ))}
+                            </div>   
+                            <div className="container-info-general">
+                                <h4>Color Grasa</h4>
+                                {dataColorGrasa.map((filaColorGrasa) =>
+                                (
+                                    <label key={filaColorGrasa.color}>{filaColorGrasa.color}</label>
+                                ))}
+                            </div> 
+                            <div className="container-info-general">
+                                <h4>Color Carne</h4>
+                                {dataColorCarne.map((filaColorCarne) =>
+                                (
+                                    <label key={filaColorCarne.color}>{filaColorCarne.color}</label>
+                                ))}
+                            </div>
+                            <div className="container-info-general">
+                                <h4>Marmoreado</h4>
+                                {dataMarmoreado.map((filaMarmoreado) =>
+                                (
+                                    <label key={filaMarmoreado.marmoreado}>{filaMarmoreado.marmoreado}</label>
+                                ))}
+                            </div>  
+                                         
                         </div>
                     <div className="container-textbox-pedidos">
                         <div className="container-textbox">

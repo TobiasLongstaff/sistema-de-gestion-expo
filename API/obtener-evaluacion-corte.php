@@ -9,17 +9,17 @@
         if(isset($_GET['id']))
         {
             $id = $_GET['id'];
-            $sql="SELECT calibres.peso FROM categoria
+            $sql="SELECT evaluacion_corte.evaluacion FROM categoria
             INNER JOIN clasificacion ON categoria.id_clasificacion = clasificacion.id
-            INNER JOIN color_calibres ON categoria.id_color = color_calibres.id_color
-            INNER JOIN calibres ON color_calibres.id_calibres = calibres.id
+            INNER JOIN color_evaluacion_corte ON categoria.id_color = color_evaluacion_corte.id_color
+            INNER JOIN evaluacion_corte ON evaluacion_corte.id = color_evaluacion_corte.id_evaluacion_corte
             WHERE categoria.id = '$id'";
             $resultado=mysqli_query($conexion,$sql);
             $json = array();
             while($filas = mysqli_fetch_array($resultado))
             {
                 $json[] = array(
-                    'peso' => $filas['peso']
+                    'evaluacion' => $filas['evaluacion']
                 );
             }
             $jsonstring = json_encode($json);
