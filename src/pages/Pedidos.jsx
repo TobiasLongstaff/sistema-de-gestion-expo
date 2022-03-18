@@ -26,6 +26,7 @@ const Pedidos = () =>
     const [ activoCliente, setActivo ] = useState('container-clientes')
     const [ activoCategoria, setActivoCategoria] = useState('container-categorias')
     const [ infoCategoria, setdataCategoriaComp] = useState([0])
+    const [ activoInfoCategoria, setActivoInfoCategoria] = useState('container-info-categorias')
     // {
     //     id: '',
     //     color: '',
@@ -447,6 +448,18 @@ const Pedidos = () =>
         }, 200)
     }
 
+    const mostrarInfoCategoria = () =>
+    {
+        if(activoInfoCategoria === 'container-info-categorias active')
+        {
+            setActivoInfoCategoria('container-info-categorias')
+        }
+        else
+        {
+            setActivoInfoCategoria('container-info-categorias active')
+        }
+    }
+
     const handelChangeCliente = e =>
     {
         setForm(
@@ -486,104 +499,105 @@ const Pedidos = () =>
                             ))}
                         </div>  
                     </div>
-                        <div className="container-info-categorias">
-                            {/* <button><UilEye size="20"/></button> */}
-                            <div className="container-info-general">
-                                <label>Color: {infoCategoria[0].color}</label>
-                                <label>Clasificacion: {infoCategoria[0].clasificacion}</label>
-                                <label>Pje Max: {infoCategoria[0].pje_max}</label>
-                                <label>Pje Min: {infoCategoria[0].pje_min}</label>
-                                <label>PH: {infoCategoria[0].ph}</label>
-                                <label>GI: {infoCategoria[0].gi}</label>
-                            </div>
-                            <div className="container-info-general">
-                                <h4>Calibres</h4>
-                                {dataCalibre.map((filaCalibre) =>
-                                (
-                                    <label key={filaCalibre.peso}>{filaCalibre.peso}</label>
-                                ))}
-                            </div>
-                            <div className="container-info-general">
-                                <h4>Razas</h4>
-                                {dataRaza.map((filaRaza) =>
-                                (
-                                    <label key={filaRaza.nombre}>{filaRaza.nombre}</label>
-                                ))}
-                            </div>     
-                            <div className="container-info-general">
-                                <h4>Tipo Animal</h4>
-                                {dataTipoAnimal.map((filaTipoAnimal) =>
-                                (
-                                    <label key={filaTipoAnimal.tipo}>{filaTipoAnimal.tipo}</label>
-                                ))}
-                            </div>    
-                            <div className="container-info-general">
-                                <h4>Denticion</h4>
-                                {dataDenticion.map((filaDenticion) =>
-                                (
-                                    <label key={filaDenticion.denticion}>{filaDenticion.denticion}</label>
-                                ))}
-                            </div>    
-                            <div className="container-info-general">
-                                <h4>Grasa</h4>
-                                {dataGrasa.map((filaGrasa) =>
-                                (
-                                    <label key={filaGrasa.numero}>{filaGrasa.numero}</label>
-                                ))}
-                            </div>
-                            <div className="container-info-general">
-                                <h4>Cobertura</h4>
-                                {dataCobertura.map((filaCobertura) =>
-                                (
-                                    <label key={filaCobertura.cobertura}>{filaCobertura.cobertura}</label>
-                                ))}
-                            </div>      
-                            <div className="container-info-general">
-                                <h4>Osificacion</h4>
-                                {dataOsificacion.map((filaOsificacion) =>
-                                (
-                                    <label key={filaOsificacion.letra}>{filaOsificacion.letra}</label>
-                                ))}
-                            </div>  
-                            <div className="container-info-general">
-                                <h4>Evaluacion De Corte</h4>
-                                {dataEvaluacionCorte.map((filaEvaluacionCorte) =>
-                                (
-                                    <label key={filaEvaluacionCorte.evaluacion}>{filaEvaluacionCorte.evaluacion}</label>
-                                ))}
-                            </div>   
-                            <div className="container-info-general">
-                                <h4>Color Grasa</h4>
-                                {dataColorGrasa.map((filaColorGrasa) =>
-                                (
-                                    <label key={filaColorGrasa.color}>{filaColorGrasa.color}</label>
-                                ))}
-                            </div> 
-                            <div className="container-info-general">
-                                <h4>Color Carne</h4>
-                                {dataColorCarne.map((filaColorCarne) =>
-                                (
-                                    <label key={filaColorCarne.color}>{filaColorCarne.color}</label>
-                                ))}
-                            </div>
-                            <div className="container-info-general">
-                                <h4>Marmoreado</h4>
-                                {dataMarmoreado.map((filaMarmoreado) =>
-                                (
-                                    <label key={filaMarmoreado.marmoreado}>{filaMarmoreado.marmoreado}</label>
-                                ))}
-                            </div>  
-                                         
+                    <button onClick={mostrarInfoCategoria} type="button" className="btn-general btn-primario"><UilEye size="20"/></button>
+                    <div className={activoInfoCategoria}>
+                        <div className="container-info-general">
+                            <h4>Info</h4>
+                            <label>Color: {infoCategoria[0].color}</label>
+                            <label>Clasificacion: {infoCategoria[0].clasificacion}</label>
+                            <label>Pje Max: {infoCategoria[0].pje_max}</label>
+                            <label>Pje Min: {infoCategoria[0].pje_min}</label>
+                            <label>PH: {infoCategoria[0].ph}</label>
+                            <label>GI: {infoCategoria[0].gi}</label>
                         </div>
+                        <div className="container-info-general">
+                            <h4>Calibres</h4>
+                            {dataCalibre.map((filaCalibre) =>
+                            (
+                                <label key={filaCalibre.peso}>{filaCalibre.peso}</label>
+                            ))}
+                        </div>
+                        <div className="container-info-general">
+                            <h4>Razas</h4>
+                            {dataRaza.map((filaRaza) =>
+                            (
+                                <label key={filaRaza.nombre}>{filaRaza.nombre}</label>
+                            ))}
+                        </div>     
+                        <div className="container-info-general">
+                            <h4>Tipo Animal</h4>
+                            {dataTipoAnimal.map((filaTipoAnimal) =>
+                            (
+                                <label key={filaTipoAnimal.tipo}>{filaTipoAnimal.tipo}</label>
+                            ))}
+                        </div>    
+                        <div className="container-info-general">
+                            <h4>Denticion</h4>
+                            {dataDenticion.map((filaDenticion) =>
+                            (
+                                <label key={filaDenticion.denticion}>{filaDenticion.denticion}</label>
+                            ))}
+                        </div>    
+                        <div className="container-info-general">
+                            <h4>Grasa</h4>
+                            {dataGrasa.map((filaGrasa) =>
+                            (
+                                <label key={filaGrasa.numero}>{filaGrasa.numero}</label>
+                            ))}
+                        </div>
+                        <div className="container-info-general">
+                            <h4>Cobertura</h4>
+                            {dataCobertura.map((filaCobertura) =>
+                            (
+                                <label key={filaCobertura.cobertura}>{filaCobertura.cobertura}</label>
+                            ))}
+                        </div>      
+                        <div className="container-info-general">
+                            <h4>Osificacion</h4>
+                            {dataOsificacion.map((filaOsificacion) =>
+                            (
+                                <label key={filaOsificacion.letra}>{filaOsificacion.letra}</label>
+                            ))}
+                        </div>  
+                        <div className="container-info-general">
+                            <h4>Evaluacion De Corte</h4>
+                            {dataEvaluacionCorte.map((filaEvaluacionCorte) =>
+                            (
+                                <label key={filaEvaluacionCorte.evaluacion}>{filaEvaluacionCorte.evaluacion}</label>
+                            ))}
+                        </div>   
+                        <div className="container-info-general">
+                            <h4>Color Grasa</h4>
+                            {dataColorGrasa.map((filaColorGrasa) =>
+                            (
+                                <label key={filaColorGrasa.color}>{filaColorGrasa.color}</label>
+                            ))}
+                        </div> 
+                        <div className="container-info-general">
+                            <h4>Color Carne</h4>
+                            {dataColorCarne.map((filaColorCarne) =>
+                            (
+                                <label key={filaColorCarne.color}>{filaColorCarne.color}</label>
+                            ))}
+                        </div>
+                        <div className="container-info-general">
+                            <h4>Marmoreado</h4>
+                            {dataMarmoreado.map((filaMarmoreado) =>
+                            (
+                                <label key={filaMarmoreado.marmoreado}>{filaMarmoreado.marmoreado}</label>
+                            ))}
+                        </div>  
+                                     
+                    </div>
+                    <div className="container-textbox">
+                        <textarea cols="30" rows="5" name="descripcion" onChange={handelChangeCliente} className="textbox-genegal textarea-general" required></textarea>
+                        <label>Descripcion del producto</label>
+                    </div>
+                    <div className="container-textbox">
+                        <input type="text" className="textbox-genegal" name="localidad" onChange={handelChangeCliente} required/>
+                        <label>Localidad</label>
+                    </div>
                     <div className="container-textbox-pedidos">
-                        <div className="container-textbox">
-                            <textarea cols="30" rows="5" name="descripcion" onChange={handelChangeCliente} className="textbox-genegal textarea-general" required></textarea>
-                            <label>Descripcion del producto</label>
-                        </div>
-                        <div className="container-textbox">
-                            <input type="text" className="textbox-genegal" name="localidad" onChange={handelChangeCliente} required/>
-                            <label>Localidad</label>
-                        </div>
                         <div className="container-textbox">
                             <input type="text" className="textbox-genegal" name="cantidad" onChange={handelChangeCliente} required/>
                             <label>Cantidad</label>

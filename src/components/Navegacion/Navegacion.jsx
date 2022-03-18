@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './navegacion.css'
-import LogoSvg from '../../img/frigopico.svg'
 import { Link } from 'react-router-dom'
 import { UilSignout, UilUserCircle, UilAngleLeft } from '@iconscout/react-unicons'
 import Cookies from 'universal-cookie'
@@ -59,7 +58,6 @@ const Navigation = ({texto, volver}) =>
                 <h1>{texto}</h1>
             </header>
             <main className="container-controles-nav">
-                <img className="img-logo-nav" src={LogoSvg} alt="logo frigopico" />
                 <div>
                     <button className="btn-nav-general">
                         <UilUserCircle size="32"/>

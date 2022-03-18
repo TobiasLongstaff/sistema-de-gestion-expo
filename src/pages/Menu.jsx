@@ -34,6 +34,11 @@ const Menu = () =>
                         ABM Colores
                     </button>
                 </Link>
+                <Link to="/localidades">
+                    <button type="button" className="btn-general-menu">
+                        ABM Localidades
+                    </button>
+                </Link>
             </main>
         </article>
     )

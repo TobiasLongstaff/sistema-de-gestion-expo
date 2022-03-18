@@ -7,35 +7,31 @@ import Cookies from 'universal-cookie'
 
 const cookies = new Cookies
 
-const Clientes = () =>
+const Localidades = () =>
 {
-    const [ form, setForm ] = useState({ nombre_apellido: '', id_usuario: cookies.get('IdSession'), id_cliente: '' }) 
+    const [ form, setForm ] = useState({ nombre: '' }) 
     const [ MensajeError, setError ] = useState(null)
     const [ data, setData ] = useState([])
     const [ loading, setLoading ] = useState(true)
     const [ btn_value, setBtn ] = useState('Crear')
     const [ btnForm, setBtnForm] = useState('var(--principal)')
-    const [ data_usuarios, setDataUsuarios] = useState([])
-    const [ editar, setEditar ] = useState(false)
+    const [ editar, setEditar] = useState(false)
 
     useEffect(() =>
     {
-        obtenerClientes()
+        obtenerLocalidades()
     },[])
 
-    const obtenerClientes = async () => 
+    const obtenerLocalidades = async () => 
     {
         try
         {
-            let res = await fetch(url+'obtener-clientes.php')
+            let res = await fetch(url+'obtener-localidades.php')
             let datos = await res.json()
-            let res_usuarios = await fetch(url+'obtener-usuarios.php')
-            let datos_usuarios = await res_usuarios.json()
             
-            if(typeof datos !== 'undefined' && typeof datos_usuarios !== 'undefined')
+            if(typeof datos !== 'undefined')
             {
                 setData(datos)
-                setDataUsuarios(datos_usuarios)
                 setLoading(false)
             }
         }
@@ -48,17 +44,18 @@ const Clientes = () =>
     const handelSubmit = async e =>
     {
         e.preventDefault();
-        
-        let url_cliente = ''
+
+        let url_localidades = ''
         if(editar === true)
         {
-            url_cliente = 'editar-cliente.php'
+            url_localidades = 'editar-localidad.php'
         } 
         else
         {
-            url_cliente = 'crear-cliente.php'
+            url_localidades = 'crear-localidad.php'
         }
-
+        console.log(editar)
+        console.log(url_localidades)
         try
         {
             let config =
@@ -71,7 +68,7 @@ const Clientes = () =>
                 },
                 body: JSON.stringify(form)
             }
-            let res = await fetch(url+url_cliente, config)
+            let res = await fetch(url+url_localidades, config)
             let infoPost = await res.json()
             console.log(infoPost[0])
             if(infoPost[0].error == 0)
@@ -82,16 +79,15 @@ const Clientes = () =>
                 setBtn('Crear')
                 setForm(
                 {
-                    nombre_apellido: '',
-                    id_usuario: '',
-                    id_cliente: ''
+                    nombre: '',
+                    id_localidad: '',
                 })
                 Swal.fire(
                     'Operacion realizada correctamente',
                     '',
                     'success'
                 )
-                obtenerClientes()
+                obtenerLocalidades()
             }
             else
             {
@@ -130,12 +126,12 @@ const Clientes = () =>
         {
             if(result.isConfirmed) 
             {
-                eliminarCliente(id_fila)
+                eliminarLocalidad(id_fila)
             }
         })
     }
 
-    const eliminarCliente = async (id_fila) =>
+    const eliminarLocalidad = async (id_fila) =>
     {
         try
         {
@@ -148,7 +144,7 @@ const Clientes = () =>
                     'Content-Type': 'application/json'
                 }
             }
-            let res = await fetch(url+'eliminar-cliente.php?id='+id_fila, config)
+            let res = await fetch(url+'eliminar-localidad.php?id='+id_fila, config)
             let infoDel = await res.json()
             console.log(infoDel[0])
             if(infoDel[0].error == 0)
@@ -158,7 +154,7 @@ const Clientes = () =>
                     'Your file has been deleted.',
                     'success'
                 )
-                obtenerClientes()
+                obtenerLocalidades()
             }
             else
             {
@@ -178,19 +174,19 @@ const Clientes = () =>
     const handelEditar = async (id_fila) =>
     {
         setEditar(true)
+        console.log(editar)
         setBtnForm('var(--verde)')
         try
         {
-            let res = await fetch(url+'obtener-clientes.php?id='+id_fila)
+            let res = await fetch(url+'obtener-localidades.php?id='+id_fila)
             let datos = await res.json()
             if(typeof datos !== 'undefined')
             {
-                console.log(datos[0].usuario)
+                console.log(datos[0].nombre)
                 setForm(
                 {
-                    nombre_apellido: datos[0].nombre_apellido,
-                    id_usuario: datos[0].usuario,
-                    id_cliente: id_fila
+                    nombre: datos[0].nombre,
+                    id_localidad: id_fila
                 })
                 console.log(form)
                 setBtn('Editar')
@@ -205,21 +201,14 @@ const Clientes = () =>
     if(!loading)
         return(
             <article>
-                <Navegacion texto="ABM Clientes" volver="/menu"/>
+                <Navegacion texto="ABM Localidades" volver="/menu"/>
                 <main className="container-abm">
                     <form className="container-form-abm container-login" onSubmit={handelSubmit}>
-                        <h2>Agregar Cliente</h2>
+                        <h2>Agregar Localidad</h2>
                         <div className="container-textbox">
-                            <input type="text" value={form.nombre_apellido}  className="textbox-genegal" name="nombre_apellido" onChange={handelChange} required/>
-                            <label>Nombre y Apellido</label>
+                            <input type="text" value={form.nombre} className="textbox-genegal" name="nombre" onChange={handelChange} required/>
+                            <label>Nombre</label>
                         </div>
-                        <select value={form.id_usuario} className="select-general">
-                            <option disabled>Usuario</option>
-                            {data_usuarios.map((fila_usuarios) =>
-                            (
-                                <option key={fila_usuarios.id} value={fila_usuarios.id}>{fila_usuarios.nombre}</option>
-                            ))}
-                        </select>
                         <label className="text-error">{MensajeError}</label>
                         <input type="submit" style={{ background: btnForm}} value={btn_value} className="btn-primario btn-general"/>
                     </form>
@@ -229,11 +218,8 @@ const Clientes = () =>
                                 <thead>
                                     <tr>
                                         <th>
-                                            <span>Nombre y Apellido</span>
+                                            <span>Nombre</span>
                                         </th>
-                                        <th>
-                                            <span>Usuario</span>
-                                        </th> 
                                         <th>
                                             <span>Controles</span>   
                                         </th>
@@ -247,8 +233,7 @@ const Clientes = () =>
                                     {data.map((fila) =>
                                     (
                                         <tr key={fila.id}>
-                                            <td>{fila.nombre_apellido}</td>
-                                            <td>{fila.usuario}</td>
+                                            <td>{fila.nombre}</td>
                                             <td className="td-btn">
                                                 <button type="button" className="btn-table-deshacer" onClick={() =>handelEliminar(fila.id)}>
                                                     eliminar
@@ -271,4 +256,4 @@ const Clientes = () =>
     )
 }
 
-export default Clientes
+export default Localidades
