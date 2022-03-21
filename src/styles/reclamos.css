@@ -1,0 +1,29 @@
+.form-reclamos
+{
+    box-sizing: border-box;
+    padding: 5%;
+    display: grid;
+    gap: 17px;
+}
+
+.selectbox-general
+{
+    height: 230px;
+}
+
+.selectbox-general-2
+{
+    height: 165px;
+}
+
+.conteiner-select
+{
+    display: grid;
+    gap: 20px;
+}
+
+.conteiner-btn
+{
+    display: flex;
+    gap: 20px;
+}

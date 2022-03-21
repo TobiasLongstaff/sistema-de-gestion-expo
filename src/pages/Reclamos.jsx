@@ -1,10 +1,276 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Navigation from '../components/Navegacion/Navegacion'
+import '../styles/reclamos.css'
+import { UilSearch } from '@iconscout/react-unicons'
+import url from '../services/Settings'
+import Cookies from 'universal-cookie'
+import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
+
+const cookies = new Cookies
 
 const Reclamos = () =>
 {
+
+    const [ form, setForm ] = useState(
+    { 
+        cliente: '', 
+        id_usuario: cookies.get('IdSession'), 
+        id_cliente: '', 
+        categoria: '', 
+        motivo: '',
+        fechaReclamo: '', 
+        fechaRecepcion: '',
+        observacion: ''
+    })
+    const [ activoCliente, setActivo ] = useState('container-clientes')
+    const [ data, setData ] = useState([])
+    const motivo = useRef()
+    const [ fechaActual, setFechaActual ] = useState('')
+
+    useEffect(() =>
+    {
+        obtenerFechaActual()
+
+        if(activoCliente === 'container-clientes active')
+        {
+            obtenerClientes()
+        }
+
+        if(form.categoria == 'Calidad')
+        {
+            motivo.current.disabled = false;
+        }
+        else if(form.categoria != 'Calidad' && form.motivo != '')
+        {
+            motivo.current.disabled = true;
+            motivo.current.value = ''
+            setForm(
+                {
+                    ...form,
+                    motivo: ''
+                }
+            )
+        }
+        else
+        {
+            motivo.current.disabled = true;
+        }
+    },[form])
+
+    const obtenerFechaActual = () =>
+    {
+        const fecha = new Date()
+        const num = fecha.getDate()
+        let mes = String(fecha.getMonth() + 1)
+        const year = fecha.getFullYear()
+
+        if(mes.length === 1)
+        {
+            mes = '0'+mes
+        }
+
+        setFechaActual(year+'-'+mes+'-'+num)
+    }
+
+    const obtenerClientes = async () =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-clientes.php?nombre=' + form.cliente + '&id_usuario=' + form.id_usuario)
+            let datos = await res.json()
+            
+            if(typeof datos !== 'undefined')
+            {
+                setData(datos)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const handelSubmit = e =>
+    {
+        e.preventDefault()
+        Swal.fire(
+        {
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => 
+        {
+            if(result.isConfirmed) 
+            {
+                crearReclamos()
+            }
+        })
+    }
+
+    const crearReclamos = async () =>
+    {
+        try
+        {
+            let config =
+            {
+                method: 'POST',
+                headers:
+                {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            }
+            let res = await fetch(url+'crear-reclamo.php', config)
+            let infoPost = await res.json()
+            console.log(infoPost[0])
+            if(infoPost[0].error == 0)
+            {
+                Swal.fire(
+                    'Operacion realizada correctamente',
+                    '',
+                    'success'
+                )
+            }
+            else
+            {
+                Swal.fire(
+                    'Error inesperado intentar mas tarde',
+                    '',
+                    'error'
+                )
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+            Swal.fire(
+                'Error inesperado intentar mas tarde',
+                '',
+                'error'
+            )
+        }
+    }
+
+    const fueraDeFoco = () =>
+    {
+        setTimeout(function () {
+            if(activoCliente === 'container-clientes active')
+            {
+                setActivo('container-clientes')
+            }
+            else if(activoCategoria === 'container-categorias active')
+            {                
+                setActivoCategoria('container-categorias')                
+            }
+        }, 200)
+    }
+
+    const mostrarClientes = () =>
+    {
+        setActivo('container-clientes active')
+    }
+
+    const handelChangeCliente = e =>
+    {
+        setForm(
+        {
+            ...form,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const completarCliente = (nombre, id) =>
+    {
+        setForm(
+        {
+            ...form,
+            cliente: nombre,
+            id_cliente: id
+        })
+    }
+
+    const handelChange = e =>
+    {
+        setForm(
+        {
+            ...form,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const subirImagenes = () =>
+    {
+
+    }
+
     return(
-        <Navigation texto="Reclamos" volver="/menu"/>
+        <article>
+            <Navigation texto="Reclamos" volver="/menu"/>
+            <main className="container-pedidos">
+                <form className="form-reclamos" onSubmit={handelSubmit}>
+                    <div>
+                        <span>Fecha del Reclamo</span>
+                        <input type="date" name="fechaReclamo" value={fechaActual} className="textbox-genegal" onChange={handelChange} required disabled/>                        
+                    </div>
+                    <div>
+                        <span>Fecha de recepción de la mercadería</span>
+                        <input type="date" name="fechaRecepcion" className="textbox-genegal" onChange={handelChange} required />                        
+                    </div>
+                    <div>
+                        <div className="form-group">
+                            <input type="search" className="textbox-genegal textbox-buscar" autoComplete="off" name="cliente" onClick={mostrarClientes} onChange={handelChangeCliente} onBlur={fueraDeFoco} value={form.cliente} placeholder="Cliente" required="" />
+                            <UilSearch size="20" className="input-icon"/>                        
+                        </div>
+                        <div className={activoCliente}>
+                            {data.map((fila) =>
+                            (
+                                <button className="btn-tabla-buscar" type="button" onClick={()=>completarCliente(fila.nombre_apellido, fila.id)} key={fila.id}>{fila.nombre_apellido}</button>
+                            ))}
+                        </div>                          
+                    </div>
+                    <div>
+                        <span>Observaciones</span>
+                        <textarea className="textbox-genegal textarea-general" name="observacion" onChange={handelChange} rows="5" cols="30" required></textarea>                        
+                    </div>
+                    <div>
+                        <span>Categoría del reclamo o motivo</span>
+                        <div className="conteiner-select">
+                            <select className="textbox-genegal selectbox-general" onChange={handelChange} name="categoria" size="10" required>
+                                <option value="Calidad">Calidad</option>
+                                <option value="Descuento por Pago de Contado">Descuento por Pago de Contado</option>
+                                <option value="Diferencia en el Kilaje">Diferencia en el Kilaje</option>
+                                <option value="Diferencia en el Precio">Diferencia en el Precio</option>
+                                <option value="Error de Etiquetado">Error de Etiquetado</option>
+                                <option value="Error Documental Facturación">Error Documental Facturación</option>
+                                <option value="Faltante de Mercadería">Faltante de Mercadería</option>
+                                <option value="Llegada fuera de Horario">Llegada fuera de Horario</option>
+                                <option value="Pedido Erroneo">Pedido Erroneo</option>
+                                <option value="Acuerdo Comercial">Acuerdo Comercial</option>
+                            </select>
+                            <select ref={motivo} className="textbox-genegal selectbox-general-2" onChange={handelChange} name="motivo" size="7" required disabled>
+                                <option value="Calidad Especifica">Calidad Especifica</option>
+                                <option value="Color">Color</option>
+                                <option value="Estado">Estado</option>
+                                <option value="Golpe">Golpe</option>
+                                <option value="Grasa">Grasa</option>
+                                <option value="Packaging">Packaging</option>
+                                <option value="Vencimiento">Vencimiento</option>
+                            </select>                            
+                        </div>
+                    </div>
+                    <div className="conteiner-btn">
+                        <input type="submit" className="btn-primario btn-general" value="Enviar"/>   
+                        <input type="file" />
+                    </div>
+                </form>
+            </main>
+        </article>
+
     )
 }
 

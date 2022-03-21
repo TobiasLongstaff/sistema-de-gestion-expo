@@ -92,7 +92,7 @@ h2
     font-size: 1rem;
     background-color: var(--fondo2);
     cursor: pointer;
-    width: 120px;
+    width: 130px;
     height: 35px;
 }
 
@@ -148,7 +148,7 @@ h2
     width: 100%;
 }
 
-.container-clientes, .container-categorias
+.container-clientes, .container-categorias, .container-localidades
 {
     display: none;
     border: 2px solid var(--principal);
@@ -178,7 +178,7 @@ h2
     transition: .3s ease;
 }
 
-.container-clientes.active, .container-categorias.active
+.container-clientes.active, .container-categorias.active, .container-localidades.active
 {
     display: block;
 }

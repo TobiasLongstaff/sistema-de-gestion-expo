@@ -12,12 +12,15 @@ const Pedidos = () =>
 {
     const [ data, setData ] = useState([])
     const [ dataCategoria, setdataCategoria ] = useState([])
+    const [ dataLocalidades, setdataLocalidades ] = useState([])
     const [ form, setForm ] = useState(
     { 
         cliente: '', 
         id_usuario: cookies.get('IdSession'), 
         id_cliente: '', 
         id_categoria: '',
+        id_localidad: '',
+        localidad: '',
         categorias: '', 
         descripcion: '', 
         cantidad: '', 
@@ -26,28 +29,8 @@ const Pedidos = () =>
     const [ activoCliente, setActivo ] = useState('container-clientes')
     const [ activoCategoria, setActivoCategoria] = useState('container-categorias')
     const [ infoCategoria, setdataCategoriaComp] = useState([0])
+    const [ activoLocalidad, setActivoLocalidad] = useState('container-localidades')
     const [ activoInfoCategoria, setActivoInfoCategoria] = useState('container-info-categorias')
-    // {
-    //     id: '',
-    //     color: '',
-    //     clasificacion: '',
-    //     id_calibre: '',
-    //     pje_max: '',
-    //     pje_min: '',
-    //     id_raza: '',
-    //     id_tipo_animal: '',
-    //     id_denticion: '',
-    //     id_grasa: '',
-    //     id_cobertura: '',
-    //     id_osificacion: '',
-    //     id_evaluacion_corte: '',
-    //     id_color_grasa: '',
-    //     id_color_carne: '',
-    //     id_marmoreado: '',
-    //     ph: '',
-    //     gi: ''
-    // })
-
     const [ dataCalibre, setDataCalibre ] = useState([])
     const [ dataRaza, setDataRaza ] = useState([])
     const [ dataTipoAnimal, setDataTipoAnimal] = useState([])
@@ -69,6 +52,10 @@ const Pedidos = () =>
         else if(activoCategoria === 'container-categorias active')
         {
             obtenerCategorias()
+        }
+        else if(activoLocalidad === 'container-localidades active')
+        {
+            obtenerLocalidades()
         }
         console.log(form)
     },[form])
@@ -107,6 +94,24 @@ const Pedidos = () =>
         {
             console.error(error)
         } 
+    }
+
+    const obtenerLocalidades = async () =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-localidades-por-clientes.php?id_cliente=' + form.id_cliente)
+            let dataLocalidades = await res.json()
+            
+            if(typeof dataLocalidades !== 'undefined')
+            {
+                setdataLocalidades(dataLocalidades)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }    
     }
 
     const handelSubmit = e =>
@@ -182,6 +187,16 @@ const Pedidos = () =>
             ...form,
             cliente: nombre,
             id_cliente: id
+        })
+    }
+
+    const completarLocalidad = (nombre, id) =>
+    {
+        setForm(
+        {
+            ...form,
+            localidad: nombre,
+            id_localidad: id
         })
     }
 
@@ -434,6 +449,11 @@ const Pedidos = () =>
         setActivoCategoria('container-categorias active')
     }
 
+    const mostrarLocalidad = () =>
+    {
+        setActivoLocalidad('container-localidades active')
+    }
+
     const fueraDeFoco = () =>
     {
         setTimeout(function () {
@@ -444,6 +464,10 @@ const Pedidos = () =>
             else if(activoCategoria === 'container-categorias active')
             {                
                 setActivoCategoria('container-categorias')                
+            }
+            else if(activoLocalidad === 'container-localidades active')
+            {
+                setActivoLocalidad('container-localidades')
             }
         }, 200)
     }
@@ -589,13 +613,21 @@ const Pedidos = () =>
                         </div>  
                                      
                     </div>
-                    <div className="container-textbox">
-                        <textarea cols="30" rows="5" name="descripcion" onChange={handelChangeCliente} className="textbox-genegal textarea-general" required></textarea>
+                    <div>
                         <label>Descripcion del producto</label>
+                        <textarea cols="30" rows="5" name="descripcion" onChange={handelChangeCliente} className="textbox-genegal textarea-general" required></textarea>
                     </div>
-                    <div className="container-textbox">
-                        <input type="text" className="textbox-genegal" name="localidad" onChange={handelChangeCliente} required/>
-                        <label>Localidad</label>
+                    <div>
+                        <div className="form-group">
+                            <input type="search" className="textbox-genegal textbox-buscar" autocomplete="off" name="localidad" onChange={handelChangeCliente} onClick={mostrarLocalidad} onBlur={fueraDeFoco} value={form.cliente} placeholder="Localidad" required/>
+                            <UilSearch size="20" className="input-icon"/>
+                        </div>
+                        <div className={activoLocalidad}>
+                            {dataLocalidades.map((filaLocalidades) =>
+                            (
+                                <button className="btn-tabla-buscar" type="button" onClick={()=>completarLocalidad(filaLocalidades.nombre_apellido, filaLocalidades.id)} key={filaLocalidades.id}>{filaLocalidades.nombre_apellido}</button>
+                            ))}
+                        </div>                          
                     </div>
                     <div className="container-textbox-pedidos">
                         <div className="container-textbox">
