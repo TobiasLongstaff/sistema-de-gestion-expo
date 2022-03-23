@@ -27,3 +27,62 @@
     display: flex;
     gap: 20px;
 }
+
+.container-text-archivo
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-eliminar-archivo
+{
+    background-color: transparent;
+    border: none;
+}
+
+.dropzone
+{
+    cursor: pointer;
+    width: 100%;
+    height: 100px;
+    border: 1px solid var(--fondo2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    gap: 5px;
+}
+
+.dropzone-p
+{
+    color: var(--principal);
+}
+
+.container-row-archivo
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+.container-row-archivo p 
+{
+    margin: 0;
+}
+
+.progress-archivo
+{
+    -webkit-appearance: none;
+    height: 3px;
+    width: 100%;
+}
+
+::-webkit-progress-bar 
+{
+    background-color: var(--fondo1);
+}
+
+::-webkit-progress-value 
+{
+    background-color: var(--principal);
+}

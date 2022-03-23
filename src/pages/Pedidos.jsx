@@ -57,7 +57,6 @@ const Pedidos = () =>
         {
             obtenerLocalidades()
         }
-        console.log(form)
     },[form])
 
     const obtenerClientes = async () =>
@@ -105,6 +104,7 @@ const Pedidos = () =>
             
             if(typeof dataLocalidades !== 'undefined')
             {
+                console.log(dataLocalidades)
                 setdataLocalidades(dataLocalidades)
             }
         }
@@ -526,7 +526,7 @@ const Pedidos = () =>
                     <button onClick={mostrarInfoCategoria} type="button" className="btn-general btn-primario"><UilEye size="20"/></button>
                     <div className={activoInfoCategoria}>
                         <div className="container-info-general">
-                            <h4>Info</h4>
+                            <h4>Informacion</h4>
                             <label>Color: {infoCategoria[0].color}</label>
                             <label>Clasificacion: {infoCategoria[0].clasificacion}</label>
                             <label>Pje Max: {infoCategoria[0].pje_max}</label>
@@ -619,23 +619,23 @@ const Pedidos = () =>
                     </div>
                     <div>
                         <div className="form-group">
-                            <input type="search" className="textbox-genegal textbox-buscar" autocomplete="off" name="localidad" onChange={handelChangeCliente} onClick={mostrarLocalidad} onBlur={fueraDeFoco} value={form.cliente} placeholder="Localidad" required/>
+                            <input type="search" className="textbox-genegal textbox-buscar" autoComplete="off" name="localidad" onChange={handelChangeCliente} onClick={mostrarLocalidad} onBlur={fueraDeFoco} value={form.localidad} placeholder="Localidad" required/>
                             <UilSearch size="20" className="input-icon"/>
                         </div>
                         <div className={activoLocalidad}>
                             {dataLocalidades.map((filaLocalidades) =>
                             (
-                                <button className="btn-tabla-buscar" type="button" onClick={()=>completarLocalidad(filaLocalidades.nombre_apellido, filaLocalidades.id)} key={filaLocalidades.id}>{filaLocalidades.nombre_apellido}</button>
+                                <button className="btn-tabla-buscar" type="button" onClick={()=>completarLocalidad(filaLocalidades.nombre, filaLocalidades.id)} key={filaLocalidades.id}>{filaLocalidades.nombre}</button>
                             ))}
                         </div>                          
                     </div>
                     <div className="container-textbox-pedidos">
                         <div className="container-textbox">
-                            <input type="text" className="textbox-genegal" name="cantidad" onChange={handelChangeCliente} required/>
+                            <input type="number" min="1" pattern="^[0-9]+" className="textbox-genegal" name="cantidad" onChange={handelChangeCliente} required/>
                             <label>Cantidad</label>
                         </div>
                         <div className="container-textbox">
-                            <input type="text" className="textbox-genegal" name="valor" onChange={handelChangeCliente} required/>
+                            <input type="number" step="any" min="0.1" className="textbox-genegal" name="valor" onChange={handelChangeCliente} required/>
                             <label>Valor</label>
                         </div>
                     </div>

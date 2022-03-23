@@ -29,7 +29,7 @@ const SeguimientoPedidos = () =>
     {
         try
         {
-            let res = await fetch(url+'obtener-pedidos.php')
+            let res = await fetch(url+'obtener-pedidos.php?id_usuario='+idsession)
             let datos = await res.json()
             if(typeof datos !== 'undefined')
             {
@@ -52,12 +52,11 @@ const SeguimientoPedidos = () =>
                         <thead>
                             <tr className="tr-head">
                                 <th className="th-id">#</th>
-                                <th>Cliente</th>
-                                <th>Categoria</th>
-                                <th>Localidad</th>
-                                <th>Cantidad</th>
-                                <th>Valor</th>
-                                <th className="th-controles">Controles</th>
+                                <th className="th-cliente">Cliente</th>
+                                <th className="th-categoria">Categoria</th>
+                                <th className="th-localidad">Localidad</th>
+                                <th className="th-cantidad">Cantidad</th>
+                                <th className="th-valor">Valor</th>
                             </tr>
                         </thead>
                     </table>
@@ -74,13 +73,11 @@ const SeguimientoPedidos = () =>
                                     (
                                         <tr key={fila.id} className="tr-web">
                                             <td className="td-id">{fila.id}</td>
-                                            <td>{fila.cliente}</td>
-                                            <td><p>{fila.categoria}</p></td>
-                                            <td><p>{fila.localidad}</p></td>
-                                            <td>{fila.cantidad}</td>
-                                            <td>{fila.valor}</td>
-                                            <td className="td-controles">
-                                            </td>
+                                            <td className="td-cliente">{fila.cliente}</td>
+                                            <td className="td-categoria"><p>{fila.categoria}</p></td>
+                                            <td className="td-localidad"><p>{fila.localidad}</p></td>
+                                            <td className="td-cantidad">{fila.cantidad}</td>
+                                            <td className="td-valor">{fila.valor}</td>
                                         </tr>
                                     ))
                                 )

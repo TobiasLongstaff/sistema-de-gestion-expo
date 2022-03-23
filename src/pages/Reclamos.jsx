@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import Navigation from '../components/Navegacion/Navegacion'
 import '../styles/reclamos.css'
-import { UilSearch } from '@iconscout/react-unicons'
+import { UilSearch, UilPaperclip, UilTimes } from '@iconscout/react-unicons'
 import url from '../services/Settings'
 import Cookies from 'universal-cookie'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
+import { useDropzone } from 'react-dropzone'
 
 const cookies = new Cookies
 
 const Reclamos = () =>
 {
-
     const [ form, setForm ] = useState(
     { 
         cliente: '', 
@@ -26,6 +26,8 @@ const Reclamos = () =>
     const [ data, setData ] = useState([])
     const motivo = useRef()
     const [ fechaActual, setFechaActual ] = useState('')
+    const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/dvc29rwuo/image/upload`
+    const CLOUDINARY_UPLOAD_PRESET = 'siebycml'
 
     useEffect(() =>
     {
@@ -56,6 +58,40 @@ const Reclamos = () =>
             motivo.current.disabled = true;
         }
     },[form])
+
+    const onDrop = useCallback(acceptedFiles => 
+    {
+        console.log(acceptedFiles)
+        acceptedFiles.forEach((file) =>
+            enviarImagenes(file) 
+        )
+    }, [])
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+    const enviarImagenes =  async (acceptedFiles) =>
+    {
+        const file = acceptedFiles
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+        try 
+        {
+            let config =
+            {
+                method: 'POST',
+                body: formData
+            }
+            let res = await fetch(CLOUDINARY_URL, config)
+            let infoPost = await res.json()
+            console.log(infoPost)
+
+        }
+        catch(err)
+        {
+            console.error(err)
+        }
+    }
 
     const obtenerFechaActual = () =>
     {
@@ -109,6 +145,11 @@ const Reclamos = () =>
                 crearReclamos()
             }
         })
+    }
+
+    const subirImagenes = e =>
+    {
+        e.preventDefault()
     }
 
     const crearReclamos = async () =>
@@ -203,11 +244,6 @@ const Reclamos = () =>
         })
     }
 
-    const subirImagenes = () =>
-    {
-
-    }
-
     return(
         <article>
             <Navigation texto="Reclamos" volver="/menu"/>
@@ -219,7 +255,7 @@ const Reclamos = () =>
                     </div>
                     <div>
                         <span>Fecha de recepción de la mercadería</span>
-                        <input type="date" name="fechaRecepcion" className="textbox-genegal" onChange={handelChange} required />                        
+                        <input type="date" max={fechaActual} name="fechaRecepcion" className="textbox-genegal" onChange={handelChange} required />                        
                     </div>
                     <div>
                         <div className="form-group">
@@ -263,9 +299,31 @@ const Reclamos = () =>
                             </select>                            
                         </div>
                     </div>
+                    <div className="dropzone" {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        {
+                            isDragActive ?
+                            <p>Drop the files here ...</p> :
+                            <>
+                                <p className="dropzone-p">Agregue un archivo</p>
+                                <p>o suelte archivos aquí</p>
+                            </>
+                        }
+                    </div>
+                    <div>
+                        <div className="container-row-archivo">
+                            <div className="container-text-archivo">
+                                <UilPaperclip size="20" color="#4d76fd"/>
+                                <p>Pureba.jpg</p>
+                            </div>
+                            <button type="button" className="btn-eliminar-archivo">
+                                <UilTimes size="20" color="#4d76fd"/>
+                            </button>
+                        </div>
+                        <progress value="100" max="100" className="progress-archivo"></progress>
+                    </div>
                     <div className="conteiner-btn">
                         <input type="submit" className="btn-primario btn-general" value="Enviar"/>   
-                        <input type="file" />
                     </div>
                 </form>
             </main>
