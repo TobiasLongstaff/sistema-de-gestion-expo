@@ -46,6 +46,7 @@
     cursor: pointer;
     min-width: 39px;
     min-height: 39px;
+    height: 40px;
 }
 
 .btn-agregar-a-color:hover

@@ -11,6 +11,10 @@ const cookies = new Cookies
 
 const Reclamos = () =>
 {
+    const [ activoCliente, setActivo ] = useState('container-clientes')
+    const [ data, setData ] = useState([])
+    const motivo = useRef()
+    const [ fechaActual, setFechaActual ] = useState('')
     const [ form, setForm ] = useState(
     { 
         cliente: '', 
@@ -20,18 +24,17 @@ const Reclamos = () =>
         motivo: '',
         fechaReclamo: '', 
         fechaRecepcion: '',
-        observacion: ''
+        observacion: '',
+        imagenes: []
     })
-    const [ activoCliente, setActivo ] = useState('container-clientes')
-    const [ data, setData ] = useState([])
-    const motivo = useRef()
-    const [ fechaActual, setFechaActual ] = useState('')
     const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/dvc29rwuo/image/upload`
     const CLOUDINARY_UPLOAD_PRESET = 'siebycml'
+    const [ imagenes, setImagenes ] = useState([])
 
     useEffect(() =>
     {
         obtenerFechaActual()
+        console.log(JSON.stringify(form))
 
         if(activoCliente === 'container-clientes active')
         {
@@ -66,7 +69,7 @@ const Reclamos = () =>
             enviarImagenes(file) 
         )
     }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: 'image/jpeg,image/png', onDrop})
 
     const enviarImagenes =  async (acceptedFiles) =>
     {
@@ -85,7 +88,17 @@ const Reclamos = () =>
             let res = await fetch(CLOUDINARY_URL, config)
             let infoPost = await res.json()
             console.log(infoPost)
-
+            if(typeof infoPost !== 'undefined')
+            {
+                let arrayImagen = imagenes
+                arrayImagen.push(
+                {
+                    nombre: infoPost.original_filename+'.'+infoPost.format,
+                    url: infoPost.url
+                })
+                console.log(arrayImagen)
+                setImagenes(arrayImagen)
+            }
         }
         catch(err)
         {
@@ -117,6 +130,7 @@ const Reclamos = () =>
             
             if(typeof datos !== 'undefined')
             {
+                console.log(datos)
                 setData(datos)
             }
         }
@@ -142,6 +156,10 @@ const Reclamos = () =>
         {
             if(result.isConfirmed) 
             {
+                setForm({
+                    ...form,
+                    imagenes: imagenes
+                })
                 crearReclamos()
             }
         })
@@ -235,12 +253,21 @@ const Reclamos = () =>
         })
     }
 
+    const eliminarImagen = (fila) =>
+    {
+        console.log(fila)
+        let arrayImagen = imagenes.splice(fila, fila)
+        console.log(arrayImagen)
+        setImagenes(arrayImagen)
+    }
+
     const handelChange = e =>
     {
         setForm(
         {
             ...form,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
+            fechaReclamo: fechaActual
         })
     }
 
@@ -311,16 +338,21 @@ const Reclamos = () =>
                         }
                     </div>
                     <div>
-                        <div className="container-row-archivo">
-                            <div className="container-text-archivo">
-                                <UilPaperclip size="20" color="#4d76fd"/>
-                                <p>Pureba.jpg</p>
+                        {imagenes.map((filaImagenes) =>
+                        (
+                            <div key={Math.random()}>                     
+                                <div className="container-row-archivo">
+                                    <div className="container-text-archivo">
+                                        <UilPaperclip size="20" color="#4d76fd"/>
+                                        <p>{filaImagenes.nombre}</p>
+                                    </div>
+                                    <button type="button" className="btn-eliminar-archivo" onClick={()=> eliminarImagen(filaImagenes.nombre)}>
+                                        <UilTimes size="20" color="#4d76fd"/>
+                                    </button>
+                                </div>
+                                <progress value="100" max="100" className="progress-archivo"></progress>
                             </div>
-                            <button type="button" className="btn-eliminar-archivo">
-                                <UilTimes size="20" color="#4d76fd"/>
-                            </button>
-                        </div>
-                        <progress value="100" max="100" className="progress-archivo"></progress>
+                        ))}
                     </div>
                     <div className="conteiner-btn">
                         <input type="submit" className="btn-primario btn-general" value="Enviar"/>   

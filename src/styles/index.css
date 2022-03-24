@@ -162,6 +162,13 @@ h2
     box-sizing: border-box;
 }
 
+.container-tablas-clientes
+{
+    width: 100%;
+    display: grid;
+    gap: 20px;
+}
+
 .btn-tabla-buscar
 {
     width: 100%;
@@ -209,7 +216,7 @@ h2
 
 .tbl-content
 {
-    height: calc(100vh - 355px);
+    height: 290px;
     overflow-x:auto;
     margin-top: 0px;
     -webkit-animation: top 1s var(--delay) both;
@@ -311,6 +318,71 @@ th
 .container-info-general h4
 {
     margin: 0;
+}
+
+.btn-table-eliminar, .btn-table-editar
+{
+    border-radius: 5px;
+    width: 40px;
+    height: 35px;
+    border: 2px solid var(--rojo);
+    background-color: transparent;
+    color: var(--rojo);
+    cursor: pointer;
+}
+
+.th-nombre, .td-nombre
+{
+    width: 49%;
+}
+
+.th-usuario, .td-usuario
+{
+    width: 50%;
+}
+
+.th-localidad-cliente, .td-localidad-cliente, .th-nombre-usuario, .td-nombre-usuario
+{
+    width: 100%;
+}
+
+.th-btn
+{
+    text-align: center;
+    min-width: 100px;
+}
+
+.td-btn
+{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100px;
+}
+
+.btn-table-editar
+{
+    border: 2px solid var(--verde);
+    color: var(--verde);
+}
+
+.form-agregar-cliente
+{
+    display: grid;
+    height: 300px;
+}
+
+.form-agregar-localidad-cliente
+{
+    display: flex;
+    gap: 10px;
+    height: 60px;
+    align-items: end;
+}
+
+.container-form-clientes
+{
+    height: 500px;
 }
 
 .loader,

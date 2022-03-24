@@ -7,15 +7,15 @@
         $datos = json_decode(file_get_contents('php://input'));
         if($datos != null)
         {
-            $nombre_apellido = $datos->nombre_apellido;
-            $id_usuario = $datos->id_usuario;
+            $id_cliente = $datos->id_cliente;
+            $id_localidad = $datos->id_localidad;
 
-            $sql_veri_cli = "SELECT id FROM clientes WHERE nombre_apellido = '$nombre_apellido'";
+            $sql_veri_cli = "SELECT id FROM clientes_localidad WHERE id_localidad = '$id_localidad' AND id_cliente = '$id_cliente'";
             $resultado_veri_cli = mysqli_query($conexion, $sql_veri_cli);
             if(mysqli_num_rows($resultado_veri_cli) <= 0)
             {
-                $sql = "INSERT INTO clientes (nombre_apellido, id_usuario) 
-                VALUES ('$nombre_apellido', '$id_usuario')";
+                $sql = "INSERT INTO clientes_localidad (id_localidad, id_cliente) 
+                VALUES ('$id_localidad', '$id_cliente')";
                 $resultado = mysqli_query($conexion, $sql);
                 if(!$resultado)
                 {
@@ -26,24 +26,17 @@
                 }
                 else
                 { 
-                    $sql="SELECT id FROM clientes ORDER BY id DESC LIMIT 1";
-                    $resultado=mysqli_query($conexion,$sql);
-                    if($filas = mysqli_fetch_array($resultado))
-                    {
-                        $id_cliente = $filas['id'];
-                        $json[] = array(
-                            'error' => '0',
-                            'id_cliente' => $id_cliente,
-                            'mensaje' => 'Cliente Creado'
-                        );
-                    }
+                    $json[] = array(
+                        'error' => '0',
+                        'mensaje' => 'Localidad Agregada'
+                    );
                 }
             }
             else
             {
                 $json[] = array(
                     'error' => '1',
-                    'mensaje' => 'Este cliente ya se encuentra creado'
+                    'mensaje' => 'Esta localidad ya se encuentra agregada'
                 );
             }
         }

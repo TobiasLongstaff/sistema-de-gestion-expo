@@ -4,24 +4,35 @@ import '../styles/abm.css'
 import url from '../services/Settings'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
 import Cookies from 'universal-cookie'
+import { UilTrash, UilEditAlt, UilPlus } from '@iconscout/react-unicons'
 
 const cookies = new Cookies
 
 const Clientes = () =>
 {
-    const [ form, setForm ] = useState({ nombre_apellido: '', id_usuario: cookies.get('IdSession'), id_cliente: '' }) 
+    const [ form, setForm ] = useState({ nombre_apellido: '', id_usuario: '1', id_cliente: '' }) 
     const [ MensajeError, setError ] = useState(null)
     const [ data, setData ] = useState([])
+    const [ dataLocalidad, setDataLocalidad ] = useState([])
     const [ loading, setLoading ] = useState(true)
     const [ btn_value, setBtn ] = useState('Crear')
     const [ btnForm, setBtnForm] = useState('var(--principal)')
     const [ data_usuarios, setDataUsuarios] = useState([])
+    const [ dataLocalidades, setDataLocalidades] = useState([])
     const [ editar, setEditar ] = useState(false)
+    const [ idCliente, setIdCliente ] = useState('')
+    const [ formLocalidad, setFromLocalidades ] = useState({ id_localidad: '', id_cliente: ''})
 
     useEffect(() =>
     {
         obtenerClientes()
+        obtenerTodasLasLocalidades()
     },[])
+
+    useEffect(() =>
+    {
+        obtenerLocalidades()
+    },[idCliente])
 
     const obtenerClientes = async () => 
     {
@@ -43,6 +54,76 @@ const Clientes = () =>
         {
             console.error(error)
         }
+    }
+
+    const obtenerTodasLasLocalidades = async () =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-localidades.php')
+            let datosLocalidad = await res.json()
+            
+            if(typeof datosLocalidad !== 'undefined')
+            {
+                setDataLocalidades(datosLocalidad)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
+    const handelSubmitLocalidad = async e =>
+    {
+        e.preventDefault();
+        console.log(formLocalidad)
+        if(formLocalidad.id_cliente == '')
+        {
+            Swal.fire(
+                'Agregar o seleccionar un cliente',
+                'Agregar o seleccionar un cliente antes de asociar una localidad',
+                'error'
+            )
+        }
+        else
+        {
+            try
+            {
+                let config =
+                {
+                    method: 'POST',
+                    headers: 
+                    {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formLocalidad)
+                }
+                let res = await fetch(url+'agregar-localidad.php', config)
+                let infoPost = await res.json()
+                console.log(infoPost[0])
+                if(infoPost[0].error == 0)
+                {
+                    Swal.fire(
+                        'Operacion realizada correctamente',
+                        '',
+                        'success'
+                    )
+                    obtenerLocalidades()
+                }
+                else
+                {
+                    setError(infoPost[0].mensaje)
+                }
+            }
+            catch(error)
+            {
+                console.error(error)
+                setError('Error al iniciar sesion intentar mas tarde')
+            }
+        }
+
     }
 
     const handelSubmit = async e =>
@@ -76,6 +157,7 @@ const Clientes = () =>
             console.log(infoPost[0])
             if(infoPost[0].error == 0)
             {
+                setIdCliente(infoPost[0].id_cliente)
                 setEditar(false)
                 setError('')
                 setBtnForm('var(--principal)')
@@ -113,6 +195,16 @@ const Clientes = () =>
             [e.target.name]: e.target.value
         })
         console.log(form)
+    }
+
+    const handelChangeLocalidad = e =>
+    {
+        setFromLocalidades(
+        {
+            ...formLocalidad,
+            id_cliente: idCliente,
+            [e.target.name]: e.target.value
+        })
     }
 
     const handelEliminar = (id_fila) =>
@@ -175,15 +267,56 @@ const Clientes = () =>
         }
     }
 
+    const handelEliminarLocalidad = async (id_localidad) =>
+    {
+        try
+        {
+            let config = 
+            {
+                method: 'DELETE',
+                headers: 
+                {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+            let res = await fetch(url+'eliminar-localidad-de-cliente.php?id_localidad='+id_localidad, config)
+            let infoDel = await res.json()
+            console.log(infoDel[0])
+            if(infoDel[0].error == 0)
+            {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+                obtenerLocalidades()
+            }
+            else
+            {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'error'
+                )
+            }
+        }
+        catch (error)
+        {
+            console.error(error)
+        }
+    }
+
     const handelEditar = async (id_fila) =>
     {
+        setIdCliente(id_fila)
         setEditar(true)
         setBtnForm('var(--verde)')
         try
         {
             let res = await fetch(url+'obtener-clientes.php?id='+id_fila)
             let datos = await res.json()
-            if(typeof datos !== 'undefined')
+            if(typeof datos !== 'undefined') 
             {
                 console.log(datos[0].usuario)
                 setForm(
@@ -202,66 +335,133 @@ const Clientes = () =>
         }
     }
 
+    const obtenerLocalidades = async () =>
+    {
+        try
+        {
+            let res = await fetch(url+'obtener-localidades-por-clientes.php?id_cliente='+idCliente)
+            let datosLocalidad = await res.json()
+            if(typeof datosLocalidad !== 'undefined') 
+            {
+                setDataLocalidad(datosLocalidad)
+            }
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+    }
+
     if(!loading)
         return(
             <article>
                 <Navegacion texto="ABM Clientes" volver="/menu"/>
                 <main className="container-abm">
-                    <form className="container-form-abm container-login" onSubmit={handelSubmit}>
-                        <h2>Agregar Cliente</h2>
-                        <div className="container-textbox">
-                            <input type="text" value={form.nombre_apellido}  className="textbox-genegal" name="nombre_apellido" onChange={handelChange} required/>
-                            <label>Nombre y Apellido</label>
-                        </div>
-                        <select value={form.id_usuario} className="select-general">
-                            <option disabled>Usuario</option>
-                            {data_usuarios.map((fila_usuarios) =>
-                            (
-                                <option key={fila_usuarios.id} value={fila_usuarios.id}>{fila_usuarios.nombre}</option>
-                            ))}
-                        </select>
-                        <label className="text-error">{MensajeError}</label>
-                        <input type="submit" style={{ background: btnForm}} value={btn_value} className="btn-primario btn-general"/>
-                    </form>
-                    <div className="container-tabla">
-                        <div className="tbl-header">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <span>Nombre y Apellido</span>
-                                        </th>
-                                        <th>
-                                            <span>Usuario</span>
-                                        </th> 
-                                        <th>
-                                            <span>Controles</span>   
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div> 
-                        <div className="tbl-content">
-                            <table>
-                                <tbody>
-                                    {data.map((fila) =>
+                    <div className="container-form-abm container-login container-form-clientes">
+                        <form className="form-agregar-cliente" onSubmit={handelSubmit}>
+                            <h2>Agregar Cliente</h2>
+                            <div className="container-textbox">
+                                <input type="text" value={form.nombre_apellido}  className="textbox-genegal" name="nombre_apellido" onChange={handelChange} required/>
+                                <label>Nombre y Apellido</label>
+                            </div>
+                            <label>Usuario</label>
+                            <select value={form.id_usuario} name="id_usuario" className="select-general" onChange={handelChange}>
+                                <option disabled>Usuario</option>
+                                {data_usuarios.map((fila_usuarios) =>
+                                (
+                                    <option key={fila_usuarios.id} value={fila_usuarios.id}>{fila_usuarios.nombre}</option>
+                                ))}
+                            </select>
+                            <label className="text-error">{MensajeError}</label>
+                            <input type="submit" style={{ background: btnForm}} value={btn_value} className="btn-primario btn-general"/>
+                        </form>
+                        <form className="form-agregar-localidad-cliente" onSubmit={handelSubmitLocalidad}>
+                            <div>
+                                <label>Localidad</label>
+                                <select value={formLocalidad.id_localidad} name="id_localidad" className="select-general" onChange={handelChangeLocalidad}>
+                                    {dataLocalidades.map((filaLocalidades) =>
                                     (
-                                        <tr key={fila.id}>
-                                            <td>{fila.nombre_apellido}</td>
-                                            <td>{fila.usuario}</td>
-                                            <td className="td-btn">
-                                                <button type="button" className="btn-table-deshacer" onClick={() =>handelEliminar(fila.id)}>
-                                                    eliminar
-                                                </button>
-                                                <button type="button" className="btn-table-deshacer" onClick={() =>handelEditar(fila.id)}>
-                                                    editar
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        <option key={filaLocalidades.id} value={filaLocalidades.id}>{filaLocalidades.nombre}</option>
                                     ))}
-                                </tbody>
-                            </table>   
-                        </div>  
+                                </select>
+                            </div>
+                            <button style={{ background: btnForm}} className="btn-agregar-a-color" type="submit"><UilPlus size="22" color="white"/></button>
+                        </form>                        
+                    </div>
+                    <div className="container-tablas-clientes">
+                        <div className="container-tabla">
+                            <div className="tbl-header">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th className="th-nombre">
+                                                <span>Nombre y Apellido</span>
+                                            </th>
+                                            <th className="th-usuario">
+                                                <span>Usuario</span>
+                                            </th> 
+                                            <th className="th-btn">
+                                                <span>Controles</span>   
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div> 
+                            <div className="tbl-content">
+                                <table>
+                                    <tbody>
+                                        {data.map((fila) =>
+                                        (
+                                            <tr key={fila.id}>
+                                                <td className="td-nombre">{fila.nombre_apellido}</td>
+                                                <td className="td-usuario">{fila.usuario}</td>
+                                                <td className="td-btn">
+                                                    <button type="button" className="btn-table-eliminar" onClick={() =>handelEliminar(fila.id)}>
+                                                        <UilTrash size="20"/>
+                                                    </button>
+                                                    <button type="button" className="btn-table-editar" onClick={() =>handelEditar(fila.id)}>
+                                                        <UilEditAlt size="20"/>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>   
+                            </div>  
+                        </div>
+                        <div className="container-tabla">
+                            <div className="tbl-header">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th className="th-localidad-cliente">
+                                                <span>Localidad</span>
+                                            </th>
+                                            <th className="th-btn">
+                                                <span>Controles</span>   
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div> 
+                            <div className="tbl-content">
+                                <table>
+                                    <tbody>
+                                        {dataLocalidad.map((filaLocalidad) =>
+                                        (
+                                            <tr key={filaLocalidad.id}>
+                                                <td className="td-localidad-cliente">{filaLocalidad.nombre}</td>
+                                                <td className="td-btn">
+                                                    <button type="button" className="btn-table-eliminar" onClick={() =>handelEliminarLocalidad(filaLocalidad.id_clientes_localidad)}>
+                                                        <UilTrash size="20"/>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>   
+                            </div>  
+                        </div>                        
                     </div>
                 </main>
             </article>

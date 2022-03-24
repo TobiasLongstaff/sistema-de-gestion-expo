@@ -4,6 +4,7 @@ import '../styles/abm.css'
 import url from '../services/Settings'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
 import Cookies from 'universal-cookie'
+import { UilTrash, UilEditAlt } from '@iconscout/react-unicons'
 
 const cookies = new Cookies
 
@@ -217,10 +218,10 @@ const Localidades = () =>
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>
+                                        <th className="th-nombre-usuario">
                                             <span>Nombre</span>
                                         </th>
-                                        <th>
+                                        <th className="th-btn">
                                             <span>Controles</span>   
                                         </th>
                                     </tr>
@@ -233,13 +234,13 @@ const Localidades = () =>
                                     {data.map((fila) =>
                                     (
                                         <tr key={fila.id}>
-                                            <td>{fila.nombre}</td>
+                                            <td className="td-nombre-usuario">{fila.nombre}</td>
                                             <td className="td-btn">
-                                                <button type="button" className="btn-table-deshacer" onClick={() =>handelEliminar(fila.id)}>
-                                                    eliminar
+                                                <button type="button" className="btn-table-eliminar" onClick={() =>handelEliminar(fila.id)}>
+                                                    <UilTrash size="20"/>
                                                 </button>
-                                                <button type="button" className="btn-table-deshacer" onClick={() =>handelEditar(fila.id)}>
-                                                    editar
+                                                <button type="button" className="btn-table-editar" onClick={() =>handelEditar(fila.id)}>
+                                                    <UilEditAlt size="20"/>
                                                 </button>
                                             </td>
                                         </tr>
