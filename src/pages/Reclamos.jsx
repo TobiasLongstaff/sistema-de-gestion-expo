@@ -13,7 +13,6 @@ const Reclamos = () =>
 {
     const [ activoCliente, setActivo ] = useState('container-clientes')
     const [ data, setData ] = useState([])
-    const motivo = useRef()
     const [ fechaActual, setFechaActual ] = useState('')
     const [ form, setForm ] = useState(
     { 
@@ -30,6 +29,8 @@ const Reclamos = () =>
     const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/dvc29rwuo/image/upload`
     const CLOUDINARY_UPLOAD_PRESET = 'siebycml'
     const [ imagenes, setImagenes ] = useState([])
+    const formReclamos = useRef()
+    const motivo = useRef()
 
     useEffect(() =>
     {
@@ -165,11 +166,6 @@ const Reclamos = () =>
         })
     }
 
-    const subirImagenes = e =>
-    {
-        e.preventDefault()
-    }
-
     const crearReclamos = async () =>
     {
         try
@@ -194,6 +190,19 @@ const Reclamos = () =>
                     '',
                     'success'
                 )
+                formReclamos.current.reset()
+                setForm(
+                { 
+                    ...form,
+                    cliente: '',  
+                    id_cliente: '',
+                    categoria: '', 
+                    motivo: '',
+                    fechaRecepcion: '',
+                    observacion: '',
+                    imagenes: []
+                })
+                setImagenes([])
             }
             else
             {
@@ -275,7 +284,7 @@ const Reclamos = () =>
         <article>
             <Navigation texto="Reclamos" volver="/menu"/>
             <main className="container-pedidos">
-                <form className="form-reclamos" onSubmit={handelSubmit}>
+                <form ref={formReclamos} className="form-reclamos" onSubmit={handelSubmit}>
                     <div>
                         <span>Fecha del Reclamo</span>
                         <input type="date" name="fechaReclamo" value={fechaActual} className="textbox-genegal" onChange={handelChange} required disabled/>                        

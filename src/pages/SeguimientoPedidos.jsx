@@ -61,7 +61,7 @@ const SeguimientoPedidos = () =>
                         </thead>
                     </table>
                 </div>
-                <div className="tbl-content">
+                <div className="tbl-content-completo">
                     <table>
                         <tbody>
                             { loading ? (

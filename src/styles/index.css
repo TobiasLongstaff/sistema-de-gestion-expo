@@ -214,13 +214,18 @@ h2
     animation: top 1s var(--delay) both;
 }
 
-.tbl-content
+.tbl-content, .tbl-content-completo
 {
     height: 290px;
     overflow-x:auto;
     margin-top: 0px;
     -webkit-animation: top 1s var(--delay) both;
     animation: top 1s var(--delay) both;
+}
+
+.tbl-content-completo
+{
+    height: calc(100vh - 355px);
 }
 
 table
@@ -284,6 +289,21 @@ th
     width: 25%;
 }
 
+.td-fecha, .th-fecha
+{
+    width: 120px;
+}
+
+.td-cliente-reclamos, .th-cliente-reclamos
+{
+    width: 15%;
+}
+
+.td-observacion, .th-observacion
+{
+    width: 200px;
+}
+
 .container-tabla
 {
     width: 100%;
@@ -320,7 +340,7 @@ th
     margin: 0;
 }
 
-.btn-table-eliminar, .btn-table-editar
+.btn-table-eliminar, .btn-table-editar, .btn-table-principal
 {
     border-radius: 5px;
     width: 40px;
@@ -329,6 +349,12 @@ th
     background-color: transparent;
     color: var(--rojo);
     cursor: pointer;
+}
+
+.btn-table-principal
+{
+    color: var(--principal);
+    border: 2px solid var(--principal);
 }
 
 .th-nombre, .td-nombre
@@ -349,7 +375,7 @@ th
 .th-btn
 {
     text-align: center;
-    min-width: 100px;
+    min-width: 115px;
 }
 
 .td-btn
@@ -359,6 +385,13 @@ th
     gap: 10px;
     width: 100px;
 }
+
+.th-motivo, .td-motivo
+{
+    max-width: 60px;
+}
+
+
 
 .btn-table-editar
 {
@@ -383,6 +416,13 @@ th
 .container-form-clientes
 {
     height: 500px;
+}
+
+.img-reclamo
+{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
 }
 
 .loader,

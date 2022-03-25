@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Navigation from '../components/Navegacion/Navegacion'
 import '../styles/pedidos.css'
 import { UilSearch, UilEye } from '@iconscout/react-unicons'
@@ -42,6 +42,7 @@ const Pedidos = () =>
     const [ dataColorGrasa, setDataColorGrasa] = useState([])
     const [ dataColorCarne, setDataColorCarne] = useState([])
     const [ dataMarmoreado, setDataMarmoreado] = useState([])
+    const formPedido = useRef()
 
     useEffect(() =>
     {
@@ -65,7 +66,7 @@ const Pedidos = () =>
         {
             let res = await fetch(url+'obtener-clientes.php?nombre=' + form.cliente + '&id_usuario=' + form.id_usuario)
             let datos = await res.json()
-            
+            console.log(datos)
             if(typeof datos !== 'undefined')
             {
                 setData(datos)
@@ -154,6 +155,20 @@ const Pedidos = () =>
             console.log(infoPost[0])
             if(infoPost[0].error == 0)
             {
+                formPedido.current.reset()
+                setForm(
+                { 
+                    cliente: '', 
+                    id_usuario: cookies.get('IdSession'), 
+                    id_cliente: '', 
+                    id_categoria: '',
+                    id_localidad: '',
+                    localidad: '',
+                    categorias: '', 
+                    descripcion: '', 
+                    cantidad: '', 
+                    valor: ''
+                })
                 Swal.fire(
                     'Operacion realizada correctamente',
                     '',
@@ -497,7 +512,7 @@ const Pedidos = () =>
         <article>
             <Navigation texto="Pedidos" volver="/menu"/>
             <main className="container-pedidos">
-                <form className="form-pedidos" onSubmit={handelSubmit}>
+                <form ref={formPedido} className="form-pedidos" onSubmit={handelSubmit}>
                     <label>Usuario: prueba</label>
                     <div>
                         <div className="form-group">

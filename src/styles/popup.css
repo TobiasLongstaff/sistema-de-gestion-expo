@@ -1,0 +1,97 @@
+.popup-content 
+{
+    margin: auto;
+    background-color: var(--fondo1);
+    padding: 5px;
+    border-radius: 10px;
+    width: 90%;
+    height: 90%
+}
+
+.popup-arrow 
+{
+    color: rgb(255, 255, 255);
+}
+
+[role='tooltip'].popup-content 
+{
+    width: 400px;
+    height: 100px;
+    box-shadow: rgb(10 10 10 / 32%) 1px 1px 20px;
+}
+  
+.popup-overlay 
+{
+    background: rgba(0, 0, 0, 0.5);
+}
+[data-popup='tooltip'].popup-overlay 
+{
+    background: transparent;  
+}
+
+@keyframes anvil 
+{
+    0% 
+    {
+        transform: scale(1) translateY(0px);
+        opacity: 0;
+    }
+    1% 
+    {
+        transform: scale(0.96) translateY(10px);
+        opacity: 0;
+    }
+    100% 
+    {
+        transform: scale(1) translateY(0px);
+        opacity: 1;
+    }
+}
+
+.popup-content 
+{
+    -webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+}
+
+.modal > .header 
+{
+    width: 100%;
+    border-bottom: 1px solid gray;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.modal > .content 
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-height: 750px;
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 5%;
+}
+
+.modal > .actions 
+{
+    width: 100%;
+    padding: 10px 5px;
+    margin: auto;
+    text-align: center;
+}
+
+.modal > .close 
+{
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    padding: 2px 5px;
+    line-height: 20px;
+    right: -10px;
+    top: -10px;
+    font-size: 24px;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
+}

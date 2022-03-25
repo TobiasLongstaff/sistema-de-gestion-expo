@@ -228,7 +228,7 @@ const Localidades = () =>
                                 </thead>
                             </table>
                         </div> 
-                        <div className="tbl-content">
+                        <div className="tbl-content-completo">
                             <table>
                                 <tbody>
                                     {data.map((fila) =>

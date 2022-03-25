@@ -50,16 +50,19 @@
                                 'mensaje' => 'Error al cargar las imagenes, consultar con soporte',
                             );
                         }
+                        else
+                        {
+                            $json[] = array(
+                                'error' => '0',
+                                'mensaje' => 'Reclamo Creado'
+                            );
+                        }
                     }
                 }
-                $json[] = array(
-                    'error' => '0',
-                    'mensaje' => 'Reclamo Creado'
-                );
             }
-            $jsonstring = json_encode($json);
-            echo $jsonstring;
         }
     }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
     
 ?>

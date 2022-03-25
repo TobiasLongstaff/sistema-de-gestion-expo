@@ -24,7 +24,8 @@
             }
             else
             {
-                $sql="SELECT clientes.nombre_apellido AS nombre_cliente, clientes.id, usuarios.nombre_apellido 
+                $sql="SELECT clientes.nombre_apellido AS nombre_cliente, clientes.id, usuarios.id AS id_usuario, 
+                usuarios.nombre_apellido 
                 AS nombre_usuario FROM clientes INNER JOIN usuarios ON clientes.id_usuario = usuarios.id";                
             }
 
