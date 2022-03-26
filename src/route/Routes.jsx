@@ -10,6 +10,9 @@ import Colores from '../pages/Colores'
 import SeguimientoPedidos from '../pages/SeguimientoPedidos'
 import Localidades from '../pages/Localidades'
 import SeguimientoReclamos from '../pages/SeguimientoReclamos'
+import Cuenta from '../pages/Cuenta'
+import AprobarUsuarios from '../pages/AprobarUsuarios'
+import Usuarios from '../pages/Usuarios'
 
 function Rutas()
 {
@@ -26,6 +29,9 @@ function Rutas()
                 <Route exact path="/seguimiento-de-pedidos" element={<SeguimientoPedidos/>}/>
                 <Route exact path="/seguimiento-de-reclamos" element={<SeguimientoReclamos/>}/>
                 <Route exact path="/localidades" element={<Localidades/>}/>
+                <Route exact path="/mi-cuenta" element={<Cuenta/>}/>
+                <Route exact path="aprobar-usuarios/:mail/:hash/:nombre" element={<AprobarUsuarios/>} />
+                <Route exact path="/usuarios" element={<Usuarios/>} />
             </Routes>
         </BrowserRouter>
     )

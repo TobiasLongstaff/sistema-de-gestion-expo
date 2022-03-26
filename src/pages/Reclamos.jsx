@@ -31,11 +31,11 @@ const Reclamos = () =>
     const [ imagenes, setImagenes ] = useState([])
     const formReclamos = useRef()
     const motivo = useRef()
+    const btnForm = useRef()
 
     useEffect(() =>
     {
         obtenerFechaActual()
-        console.log(JSON.stringify(form))
 
         if(activoCliente === 'container-clientes active')
         {
@@ -63,14 +63,27 @@ const Reclamos = () =>
         }
     },[form])
 
+    useEffect(() =>
+    {
+        if(form.fechaRecepcion != '')
+        {
+            crearReclamos()
+        }
+
+    }, [form.imagenes])
+
     const onDrop = useCallback(acceptedFiles => 
     {
-        console.log(acceptedFiles)
         acceptedFiles.forEach((file) =>
-            enviarImagenes(file) 
+            enviarImagenes(file)
         )
     }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: 'image/jpeg,image/png', onDrop})
+
+    const {getRootProps, getInputProps, isDragActive} = useDropzone(
+    {
+        accept: 'image/jpeg,image/png',
+        onDrop
+    })
 
     const enviarImagenes =  async (acceptedFiles) =>
     {
@@ -88,17 +101,20 @@ const Reclamos = () =>
             }
             let res = await fetch(CLOUDINARY_URL, config)
             let infoPost = await res.json()
-            console.log(infoPost)
             if(typeof infoPost !== 'undefined')
             {
-                let arrayImagen = imagenes
-                arrayImagen.push(
+                const arrayImagen = 
                 {
                     nombre: infoPost.original_filename+'.'+infoPost.format,
                     url: infoPost.url
-                })
-                console.log(arrayImagen)
-                setImagenes(arrayImagen)
+                }
+                setImagenes(imagenes =>
+                [
+                    ...imagenes,
+                    arrayImagen
+                ])
+                btnForm.current.focus()
+
             }
         }
         catch(err)
@@ -161,7 +177,6 @@ const Reclamos = () =>
                     ...form,
                     imagenes: imagenes
                 })
-                crearReclamos()
             }
         })
     }
@@ -262,12 +277,11 @@ const Reclamos = () =>
         })
     }
 
-    const eliminarImagen = (fila) =>
+    const eliminarImagen = file =>
     {
-        console.log(fila)
-        let arrayImagen = imagenes.splice(fila, fila)
-        console.log(arrayImagen)
-        setImagenes(arrayImagen)
+        const newFiles = [...imagenes];
+        newFiles.splice(file, 1);
+        setImagenes(newFiles);
     }
 
     const handelChange = e =>
@@ -291,7 +305,7 @@ const Reclamos = () =>
                     </div>
                     <div>
                         <span>Fecha de recepción de la mercadería</span>
-                        <input type="date" max={fechaActual} name="fechaRecepcion" className="textbox-genegal" onChange={handelChange} required />                        
+                        <input type="date" max={fechaActual} name="fechaRecepcion" value={form.fechaRecepcion} className="textbox-genegal" onChange={handelChange} required />                        
                     </div>
                     <div>
                         <div className="form-group">
@@ -347,15 +361,15 @@ const Reclamos = () =>
                         }
                     </div>
                     <div>
-                        {imagenes.map((filaImagenes) =>
+                        {imagenes.map((filaImagenes, i) =>
                         (
-                            <div key={Math.random()}>                     
+                            <div key={i}>                     
                                 <div className="container-row-archivo">
                                     <div className="container-text-archivo">
                                         <UilPaperclip size="20" color="#4d76fd"/>
                                         <p>{filaImagenes.nombre}</p>
                                     </div>
-                                    <button type="button" className="btn-eliminar-archivo" onClick={()=> eliminarImagen(filaImagenes.nombre)}>
+                                    <button type="button" className="btn-eliminar-archivo" onClick={()=> eliminarImagen(i)}>
                                         <UilTimes size="20" color="#4d76fd"/>
                                     </button>
                                 </div>
@@ -364,7 +378,7 @@ const Reclamos = () =>
                         ))}
                     </div>
                     <div className="conteiner-btn">
-                        <input type="submit" className="btn-primario btn-general" value="Enviar"/>   
+                        <input ref={btnForm} type="submit" className="btn-primario btn-general" value="Enviar"/>   
                     </div>
                 </form>
             </main>

@@ -364,14 +364,16 @@ const Clientes = () =>
                                 <input type="text" value={form.nombre_apellido}  className="textbox-genegal" name="nombre_apellido" onChange={handelChange} required/>
                                 <label>Nombre y Apellido</label>
                             </div>
-                            <label>Usuario</label>
-                            <select value={form.id_usuario} name="id_usuario" className="select-general" onChange={handelChange}>
-                                <option disabled>Usuario</option>
-                                {data_usuarios.map((fila_usuarios) =>
-                                (
-                                    <option key={fila_usuarios.id} value={fila_usuarios.id}>{fila_usuarios.nombre}</option>
-                                ))}
-                            </select>
+                            <div>
+                                <label>Usuario</label>
+                                <select value={form.id_usuario} name="id_usuario" className="select-general" onChange={handelChange}>
+                                    <option disabled>Usuario</option>
+                                    {data_usuarios.map((fila_usuarios) =>
+                                    (
+                                        <option key={fila_usuarios.id} value={fila_usuarios.id}>{fila_usuarios.nombre}</option>
+                                    ))}
+                                </select>                                
+                            </div>
                             <label className="text-error">{MensajeError}</label>
                             <input type="submit" style={{ background: btnForm}} value={btn_value} className="btn-primario btn-general"/>
                         </form>

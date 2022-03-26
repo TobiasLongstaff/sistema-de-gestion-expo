@@ -14,7 +14,6 @@
             $observacion = $datos->observacion;
             $categoria = $datos->categoria;
             $motivo = $datos->motivo;
-            $imagenes = json_decode(json_encode($datos->imagenes), true);
 
             $sql = "INSERT INTO reclamos (id_cliente, id_usuario, fecha_reclamo, fecha_recepcion, 
             observacion, categoria, motivo) 
@@ -30,32 +29,46 @@
             }
             else
             {
-                $sql="SELECT id FROM reclamos ORDER BY id DESC LIMIT 1";
-                $resultado=mysqli_query($conexion,$sql);
-                if($filas = mysqli_fetch_array($resultado))
+                if($datos->imagenes == [])
                 {
-                    $id_reclamo = $filas['id'];
-                    foreach($imagenes as $filasImagen)
-                    {
-                        $url = $filasImagen['url'];
-                        $nombre = $filasImagen['nombre'];
+                    $json[] = array(
+                        'error' => '0',
+                        'mensaje' => 'Reclamo Creado',
+                        'img' => $datos->imagenes
+                    );
+                }
+                else
+                {
+                    $imagenes = json_decode(json_encode($datos->imagenes), true);
 
-                        $sql = "INSERT INTO imagenes_reclamo (url, nombre, id_reclamo) 
-                        VALUES ( '$url', '$nombre', '$id_reclamo' )";
-                        $resultado = mysqli_query($conexion, $sql);
-                        if(!$resultado)
+                    $sql="SELECT id FROM reclamos ORDER BY id DESC LIMIT 1";
+                    $resultado=mysqli_query($conexion,$sql);
+                    if($filas = mysqli_fetch_array($resultado))
+                    {
+                        $id_reclamo = $filas['id'];
+                        foreach($imagenes as $filasImagen)
                         {
-                            $json[] = array(
-                                'error' => '1',
-                                'mensaje' => 'Error al cargar las imagenes, consultar con soporte',
-                            );
-                        }
-                        else
-                        {
-                            $json[] = array(
-                                'error' => '0',
-                                'mensaje' => 'Reclamo Creado'
-                            );
+                            $url = $filasImagen['url'];
+                            $nombre = $filasImagen['nombre'];
+    
+                            $sql = "INSERT INTO imagenes_reclamo (url, nombre, id_reclamo) 
+                            VALUES ( '$url', '$nombre', '$id_reclamo' )";
+                            $resultado = mysqli_query($conexion, $sql);
+                            if(!$resultado)
+                            {
+                                $json[] = array(
+                                    'error' => '1',
+                                    'mensaje' => 'Error al cargar las imagenes, consultar con soporte',
+                                );
+                            }
+                            else
+                            {
+                                $json[] = array(
+                                    'error' => '0',
+                                    'mensaje' => 'Reclamo Creado con imagen',
+                                    'img' => $imagenes
+                                );
+                            }
                         }
                     }
                 }

@@ -8,7 +8,7 @@
         {
             $id = $_GET['id'];
     
-            $sql="DELETE FROM clientes WHERE id = '$id'";
+            $sql="DELETE FROM usuarios WHERE id = '$id'";
             $resultado = mysqli_query($conexion, $sql);
             if(!$resultado)
             {
@@ -21,7 +21,7 @@
             {
                 $json[] = array(
                     'error' => '0',
-                    'mensaje' => 'Cliente Eliminado'
+                    'mensaje' => 'Usuario Eliminado'
                 );
             }
         }
@@ -29,7 +29,7 @@
         {
             $json[] = array(
                 'error' => '1',
-                'mensaje' => 'Faltan datos para eliminar este cliente'
+                'mensaje' => 'Faltan datos para eliminar esta localidad'
             );
         }
         $jsonstring = json_encode($json);

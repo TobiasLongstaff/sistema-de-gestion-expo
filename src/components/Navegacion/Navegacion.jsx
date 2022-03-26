@@ -59,9 +59,11 @@ const Navigation = ({texto, volver}) =>
             </header>
             <main className="container-controles-nav">
                 <div>
-                    <button className="btn-nav-general">
-                        <UilUserCircle size="32"/>
-                    </button>
+                    <Link to="/mi-cuenta">
+                        <button className="btn-nav-general">
+                            <UilUserCircle size="32"/>
+                        </button>
+                    </Link>
                     <button onClick={handelClick} className="btn-nav-general">
                         <UilSignout size="32"/>
                     </button>
