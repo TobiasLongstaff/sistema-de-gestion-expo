@@ -67,7 +67,7 @@ const AprobarUsuarios = () =>
                 },
                 body: JSON.stringify(form)
             }
-            Swal.fire('Creando Cuenta')
+            Swal.fire('Aprobando Cuenta')
             Swal.showLoading()
             let res = await fetch(url+'aprobar-usuario.php', config)
             let infoPost = await res.json()

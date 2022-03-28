@@ -25,12 +25,6 @@ nav h1
     cursor: pointer; 
 }
 
-.btn-nav-general:hover
-{
-    transition: .3s ease all;
-    transform: scale(1.1);
-}
-
 .img-logo-nav 
 {
     height: 45px;

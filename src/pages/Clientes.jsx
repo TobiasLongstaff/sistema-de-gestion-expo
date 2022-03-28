@@ -5,11 +5,16 @@ import url from '../services/Settings'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
 import Cookies from 'universal-cookie'
 import { UilTrash, UilEditAlt, UilPlus } from '@iconscout/react-unicons'
+import { useNavigate } from 'react-router-dom'
+import Loading from '../components/Loading/Loading'
 
 const cookies = new Cookies
 
 const Clientes = () =>
 {
+    let navigate = useNavigate()
+    const idsession = cookies.get('IdSession')
+
     const [ form, setForm ] = useState({ nombre_apellido: '', id_usuario: '1', id_cliente: '' }) 
     const [ MensajeError, setError ] = useState(null)
     const [ data, setData ] = useState([])
@@ -22,6 +27,22 @@ const Clientes = () =>
     const [ editar, setEditar ] = useState(false)
     const [ idCliente, setIdCliente ] = useState('')
     const [ formLocalidad, setFromLocalidades ] = useState({ id_localidad: '', id_cliente: ''})
+
+    useEffect(() =>
+    {
+        if(idsession == null)
+        { 
+            navigate('/')
+
+        }
+        else
+        {
+            if(cookies.get('tipo') != 'admin')
+            {
+                navigate('/menu')
+            }
+        }
+    })
 
     useEffect(() =>
     {
@@ -469,7 +490,7 @@ const Clientes = () =>
             </article>
         )
     return(
-        <label>Cargando..</label>
+        <Loading/>
     )
 }
 

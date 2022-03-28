@@ -5,11 +5,13 @@ import url from '../services/Settings'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
 import Cookies from 'universal-cookie'
 import { UilTrash, UilEditAlt } from '@iconscout/react-unicons'
+import Loading from '../components/Loading/Loading'
 
 const cookies = new Cookies
 
 const Usuarios = () =>
 {
+    const idsession = cookies.get('IdSession')
     const [ form, setForm ] = useState(
     { 
         id_usuario: '',
@@ -23,7 +25,21 @@ const Usuarios = () =>
 
     useEffect(() =>
     {
-        obtenerUsuarios()
+        if(idsession == null)
+        {
+            navigate('/')
+        }
+        else
+        {
+            if(cookies.get('tipo') != 'admin')
+            {
+                navigate('/menu')
+            }
+            else
+            {
+                obtenerUsuarios()
+            }
+        }
     },[])
 
     const obtenerUsuarios = async () => 
@@ -275,7 +291,7 @@ const Usuarios = () =>
             </article>
         )
     return(
-        <label>Cargando..</label>
+        <Loading/>
     )
 }
 

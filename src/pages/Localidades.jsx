@@ -5,11 +5,16 @@ import url from '../services/Settings'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
 import Cookies from 'universal-cookie'
 import { UilTrash, UilEditAlt } from '@iconscout/react-unicons'
+import { useNavigate } from 'react-router-dom'
+import Loading from '../components/Loading/Loading'
 
 const cookies = new Cookies
 
 const Localidades = () =>
 {
+    let navigate = useNavigate()
+    const idsession = cookies.get('IdSession')
+
     const [ form, setForm ] = useState({ nombre: '' }) 
     const [ MensajeError, setError ] = useState(null)
     const [ data, setData ] = useState([])
@@ -17,6 +22,23 @@ const Localidades = () =>
     const [ btn_value, setBtn ] = useState('Crear')
     const [ btnForm, setBtnForm] = useState('var(--principal)')
     const [ editar, setEditar] = useState(false)
+    
+
+    useEffect(() =>
+    {
+        if(idsession == null)
+        { 
+            navigate('/')
+
+        }
+        else
+        {
+            if(cookies.get('tipo') != 'admin')
+            {
+                navigate('/menu')
+            }
+        }
+    })
 
     useEffect(() =>
     {
@@ -253,7 +275,7 @@ const Localidades = () =>
             </article>
         )
     return(
-        <label>Cargando..</label>
+        <Loading/>
     )
 }
 

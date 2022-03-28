@@ -438,6 +438,13 @@ th
     border-radius: 10px;
 }
 
+.container-loader
+{
+    display: flex;
+    height: 90vh;
+    align-items: center;
+}
+
 .loader,
 .loader:after 
 {
