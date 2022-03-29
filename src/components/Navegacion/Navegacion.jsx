@@ -5,6 +5,7 @@ import { UilSignout, UilUserCircle, UilAngleLeft } from '@iconscout/react-unicon
 import Cookies from 'universal-cookie'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
+import { motion } from 'framer-motion'
 
 const cookies = new Cookies
 
@@ -19,9 +20,12 @@ const Navigation = ({texto, volver}) =>
         {
             setVolver(
                 <Link to={volver}>
-                    <button className="btn-nav-general-volver">
+                    <motion.button 
+                        whileHover={{ backgroundColor: '#88a4ff' }}
+                        whileTap={{ scale: 0.9 }}
+                        className="btn-nav-general-volver">
                         <UilAngleLeft size="32"/>
-                    </button>
+                    </motion.button>
                 </Link>
             )
         }
@@ -51,22 +55,40 @@ const Navigation = ({texto, volver}) =>
         })
     }
 
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+
     return (
         <nav>
             <header className="container-header-nav">
                 {botonVolver}
-                <h1>{texto}</h1>
+                <motion.h1
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.5 }}
+                variants={variants}>
+                    {texto}
+                </motion.h1>
             </header>
             <main className="container-controles-nav">
                 <div>
                     <Link to="/mi-cuenta">
-                        <button className="btn-nav-general">
+                        <motion.button   
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="btn-nav-general">
                             <UilUserCircle size="32"/>
-                        </button>
+                        </motion.button>
                     </Link>
-                    <button onClick={handelClick} className="btn-nav-general">
+                    <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }} 
+                        onClick={handelClick} className="btn-nav-general">
                         <UilSignout size="32"/>
-                    </button>
+                    </motion.button>
                 </div>
             </main>
         </nav>

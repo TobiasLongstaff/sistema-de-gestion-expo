@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import url from '../services/Settings'
 import '../styles/registro.css'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
+import { motion } from 'framer-motion'
 
 
 const Registro = () =>
@@ -63,26 +64,54 @@ const Registro = () =>
         console.log(form)
     }
 
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+
     return(
         <article className="back-registro">
-            <main className="container-registro">
+            <motion.main
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.5 }}
+                variants={variants}  
+                className="container-registro">
                 <header className="header-registro">
                     <h1>Registro</h1>
                 </header>
                 <form onSubmit={handelSubmit} className="menu-registro">
-                    <input type="text" placeholder="Nombre y Apellido" name="nombre_apellido" onChange={handelChange} className="textbox-genegal" value={form.nombre_apellido} required/>
-                    <input type="mail" placeholder="E-mail" name="mail" onChange={handelChange} className="textbox-genegal" value={form.mail} required/>
-                    <input type="password" placeholder="Contraseña" name="password" onChange={handelChange} className="textbox-genegal" value={form.password} required/>
-                    <input type="password" placeholder="Confirmar Contraseña" name="password_con" onChange={handelChange} className="textbox-genegal" value={form.password_con} required/>
+                    <div className="container-textbox">
+                        <input type="text" name="nombre_apellido" onChange={handelChange} className="textbox-genegal" value={form.nombre_apellido} required/>                    
+                        <label>Nombre y Apellido</label>
+                    </div>
+                    <div className="container-textbox">
+                        <input type="mail" name="mail" onChange={handelChange} className="textbox-genegal" value={form.mail} required/>                
+                        <label>E-mail</label>
+                    </div>
+                    <div className="container-textbox">
+                        <input type="password" name="password" onChange={handelChange} className="textbox-genegal" value={form.password} required/>                
+                        <label>Contraseña</label>
+                    </div>
+                    <div className="container-textbox">
+                        <input type="password" name="password_con" onChange={handelChange} className="textbox-genegal" value={form.password_con} required/>
+                        <label>Confirmar Contraseña</label>
+                    </div>
                     <label className="text-error">{MensajeError}</label>
                     <div className="container-btn">
-                        <button type="submit" className="btn-primario btn-general">Crear cuenta</button>
+                        <motion.button
+                            whileHover={{ backgroundColor: '#88a4ff' }}
+                            whileTap={{ scale: 0.9 }}   
+                            type="submit" className="btn-primario btn-general">
+                                Crear cuenta
+                        </motion.button>
                         <Link to="/">
                             <button type="button" className="btn-general">Volver</button>
                         </Link>              
                     </div>
                 </form>
-            </main>                
+            </motion.main>                
     </article> 
     )
 }

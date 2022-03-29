@@ -7,6 +7,7 @@ import Cookies from 'universal-cookie'
 import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
 import { useNavigate } from 'react-router-dom'
 import Loading from '../components/Loading/Loading'
+import { motion } from 'framer-motion'
 
 const cookies = new Cookies
 
@@ -133,13 +134,13 @@ const Pedidos = () =>
         e.preventDefault()
         Swal.fire(
         {
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: '¿Está seguro?',
+            text: "¿Está seguro que quiere enviar este pedido?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Si, enviar!'
         }).then((result) => 
         {
             if(result.isConfirmed) 
@@ -523,158 +524,180 @@ const Pedidos = () =>
         })
     }
 
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+
     if(idsession)
         return(
             <article>
                 <Navigation texto="Pedidos" volver="/menu"/>
-                <main className="container-pedidos">
-                    <form ref={formPedido} className="form-pedidos" onSubmit={handelSubmit}>
-                        <label>Usuario: prueba</label>
-                        <div>
-                            <div className="form-group">
-                                <input type="search" className="textbox-genegal textbox-buscar" autoComplete="off" name="cliente" onClick={mostrarClientes} onChange={handelChangeCliente} onBlur={fueraDeFoco} value={form.cliente} placeholder="Cliente" required/>
-                                <UilSearch size="20" className="input-icon"/>
+                <motion.main
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ duration: 0.5 }}
+                    variants={variants}
+                    className="container-pedidos">
+                        <form ref={formPedido} className="form-pedidos" onSubmit={handelSubmit}>
+                            <label>Usuario: {cookies.get('nombre')}</label>
+                            <div>
+                                <div className="form-group">
+                                    <input type="search" className="textbox-genegal textbox-buscar" autoComplete="off" name="cliente" onClick={mostrarClientes} onChange={handelChangeCliente} onBlur={fueraDeFoco} value={form.cliente} placeholder="Cliente" required/>
+                                    <UilSearch size="20" className="input-icon"/>
+                                </div>
+                                <div className={activoCliente}>
+                                    {data.map((fila) =>
+                                    (
+                                        <button className="btn-tabla-buscar" type="button" onClick={()=>completarCliente(fila.nombre_apellido, fila.id)} key={fila.id}>{fila.nombre_apellido}</button>
+                                    ))}
+                                </div>                        
                             </div>
-                            <div className={activoCliente}>
-                                {data.map((fila) =>
-                                (
-                                    <button className="btn-tabla-buscar" type="button" onClick={()=>completarCliente(fila.nombre_apellido, fila.id)} key={fila.id}>{fila.nombre_apellido}</button>
-                                ))}
-                            </div>                        
-                        </div>
-                        <div>
-                            <div className="form-group">
-                                <input type="search"className="textbox-genegal textbox-buscar" autoComplete="off" name="categorias" onClick={mostrarCategorias} onChange={handelChangeCliente} onBlur={fueraDeFoco} value={form.categorias} placeholder="Categoria de seguimiento" required/>
-                                <UilSearch size="20" className="input-icon"/>
+                            <div>
+                                <div className="form-group">
+                                    <input type="search"className="textbox-genegal textbox-buscar" autoComplete="off" name="categorias" onClick={mostrarCategorias} onChange={handelChangeCliente} onBlur={fueraDeFoco} value={form.categorias} placeholder="Categoria de seguimiento" required/>
+                                    <UilSearch size="20" className="input-icon"/>
+                                </div>
+                                <div className={activoCategoria}>
+                                    {dataCategoria.map((filaCategoria) =>
+                                    (
+                                        <button className="btn-tabla-buscar" type="button" onClick={()=>completarCategoria(filaCategoria.nombre+' '+filaCategoria.color, filaCategoria.id)} key={filaCategoria.id}>{filaCategoria.nombre+' '+filaCategoria.color}</button>
+                                    ))}
+                                </div>  
                             </div>
-                            <div className={activoCategoria}>
-                                {dataCategoria.map((filaCategoria) =>
-                                (
-                                    <button className="btn-tabla-buscar" type="button" onClick={()=>completarCategoria(filaCategoria.nombre+' '+filaCategoria.color, filaCategoria.id)} key={filaCategoria.id}>{filaCategoria.nombre+' '+filaCategoria.color}</button>
-                                ))}
-                            </div>  
-                        </div>
-                        <button onClick={mostrarInfoCategoria} type="button" className="btn-general btn-primario"><UilEye size="20"/></button>
-                        <div className={activoInfoCategoria}>
-                            <div className="container-info-general">
-                                <h4>Informacion</h4>
-                                <label>Color: {infoCategoria[0].color}</label>
-                                <label>Clasificacion: {infoCategoria[0].clasificacion}</label>
-                                <label>Pje Max: {infoCategoria[0].pje_max}</label>
-                                <label>Pje Min: {infoCategoria[0].pje_min}</label>
-                                <label>PH: {infoCategoria[0].ph}</label>
-                                <label>GI: {infoCategoria[0].gi}</label>
+                            <motion.button
+                                whileHover={{ backgroundColor: '#88a4ff' }}
+                                whileTap={{ scale: 0.9 }} 
+                                onClick={mostrarInfoCategoria} 
+                                type="button" 
+                                className="btn-general btn-primario">
+                                    <UilEye size="20"/>
+                            </motion.button>
+                            <div className={activoInfoCategoria}>
+                                <div className="container-info-general">
+                                    <h4>Informacion</h4>
+                                    <label>Color: {infoCategoria[0].color}</label>
+                                    <label>Clasificacion: {infoCategoria[0].clasificacion}</label>
+                                    <label>Pje Max: {infoCategoria[0].pje_max}</label>
+                                    <label>Pje Min: {infoCategoria[0].pje_min}</label>
+                                    <label>PH: {infoCategoria[0].ph}</label>
+                                    <label>GI: {infoCategoria[0].gi}</label>
+                                </div>
+                                <div className="container-info-general">
+                                    <h4>Calibres</h4>
+                                    {dataCalibre.map((filaCalibre) =>
+                                    (
+                                        <label key={filaCalibre.peso}>{filaCalibre.peso}</label>
+                                    ))}
+                                </div>
+                                <div className="container-info-general">
+                                    <h4>Razas</h4>
+                                    {dataRaza.map((filaRaza) =>
+                                    (
+                                        <label key={filaRaza.nombre}>{filaRaza.nombre}</label>
+                                    ))}
+                                </div>     
+                                <div className="container-info-general">
+                                    <h4>Tipo Animal</h4>
+                                    {dataTipoAnimal.map((filaTipoAnimal) =>
+                                    (
+                                        <label key={filaTipoAnimal.tipo}>{filaTipoAnimal.tipo}</label>
+                                    ))}
+                                </div>    
+                                <div className="container-info-general">
+                                    <h4>Denticion</h4>
+                                    {dataDenticion.map((filaDenticion) =>
+                                    (
+                                        <label key={filaDenticion.denticion}>{filaDenticion.denticion}</label>
+                                    ))}
+                                </div>    
+                                <div className="container-info-general">
+                                    <h4>Grasa</h4>
+                                    {dataGrasa.map((filaGrasa) =>
+                                    (
+                                        <label key={filaGrasa.numero}>{filaGrasa.numero}</label>
+                                    ))}
+                                </div>
+                                <div className="container-info-general">
+                                    <h4>Cobertura</h4>
+                                    {dataCobertura.map((filaCobertura) =>
+                                    (
+                                        <label key={filaCobertura.cobertura}>{filaCobertura.cobertura}</label>
+                                    ))}
+                                </div>      
+                                <div className="container-info-general">
+                                    <h4>Osificacion</h4>
+                                    {dataOsificacion.map((filaOsificacion) =>
+                                    (
+                                        <label key={filaOsificacion.letra}>{filaOsificacion.letra}</label>
+                                    ))}
+                                </div>  
+                                <div className="container-info-general">
+                                    <h4>Evaluacion De Corte</h4>
+                                    {dataEvaluacionCorte.map((filaEvaluacionCorte) =>
+                                    (
+                                        <label key={filaEvaluacionCorte.evaluacion}>{filaEvaluacionCorte.evaluacion}</label>
+                                    ))}
+                                </div>   
+                                <div className="container-info-general">
+                                    <h4>Color Grasa</h4>
+                                    {dataColorGrasa.map((filaColorGrasa) =>
+                                    (
+                                        <label key={filaColorGrasa.color}>{filaColorGrasa.color}</label>
+                                    ))}
+                                </div> 
+                                <div className="container-info-general">
+                                    <h4>Color Carne</h4>
+                                    {dataColorCarne.map((filaColorCarne) =>
+                                    (
+                                        <label key={filaColorCarne.color}>{filaColorCarne.color}</label>
+                                    ))}
+                                </div>
+                                <div className="container-info-general">
+                                    <h4>Marmoreado</h4>
+                                    {dataMarmoreado.map((filaMarmoreado) =>
+                                    (
+                                        <label key={filaMarmoreado.marmoreado}>{filaMarmoreado.marmoreado}</label>
+                                    ))}
+                                </div>  
+                                            
                             </div>
-                            <div className="container-info-general">
-                                <h4>Calibres</h4>
-                                {dataCalibre.map((filaCalibre) =>
-                                (
-                                    <label key={filaCalibre.peso}>{filaCalibre.peso}</label>
-                                ))}
+                            <div>
+                                <label>Descripcion del producto</label>
+                                <textarea cols="30" rows="5" name="descripcion" onChange={handelChangeCliente} className="textbox-genegal textarea-general" required></textarea>
                             </div>
-                            <div className="container-info-general">
-                                <h4>Razas</h4>
-                                {dataRaza.map((filaRaza) =>
-                                (
-                                    <label key={filaRaza.nombre}>{filaRaza.nombre}</label>
-                                ))}
-                            </div>     
-                            <div className="container-info-general">
-                                <h4>Tipo Animal</h4>
-                                {dataTipoAnimal.map((filaTipoAnimal) =>
-                                (
-                                    <label key={filaTipoAnimal.tipo}>{filaTipoAnimal.tipo}</label>
-                                ))}
-                            </div>    
-                            <div className="container-info-general">
-                                <h4>Denticion</h4>
-                                {dataDenticion.map((filaDenticion) =>
-                                (
-                                    <label key={filaDenticion.denticion}>{filaDenticion.denticion}</label>
-                                ))}
-                            </div>    
-                            <div className="container-info-general">
-                                <h4>Grasa</h4>
-                                {dataGrasa.map((filaGrasa) =>
-                                (
-                                    <label key={filaGrasa.numero}>{filaGrasa.numero}</label>
-                                ))}
+                            <div>
+                                <div className="form-group">
+                                    <input type="search" className="textbox-genegal textbox-buscar" autoComplete="off" name="localidad" onChange={handelChangeCliente} onClick={mostrarLocalidad} onBlur={fueraDeFoco} value={form.localidad} placeholder="Localidad" required/>
+                                    <UilSearch size="20" className="input-icon"/>
+                                </div>
+                                <div className={activoLocalidad}>
+                                    {dataLocalidades.map((filaLocalidades) =>
+                                    (
+                                        <button className="btn-tabla-buscar" type="button" onClick={()=>completarLocalidad(filaLocalidades.nombre, filaLocalidades.id)} key={filaLocalidades.id}>{filaLocalidades.nombre}</button>
+                                    ))}
+                                </div>                          
                             </div>
-                            <div className="container-info-general">
-                                <h4>Cobertura</h4>
-                                {dataCobertura.map((filaCobertura) =>
-                                (
-                                    <label key={filaCobertura.cobertura}>{filaCobertura.cobertura}</label>
-                                ))}
-                            </div>      
-                            <div className="container-info-general">
-                                <h4>Osificacion</h4>
-                                {dataOsificacion.map((filaOsificacion) =>
-                                (
-                                    <label key={filaOsificacion.letra}>{filaOsificacion.letra}</label>
-                                ))}
-                            </div>  
-                            <div className="container-info-general">
-                                <h4>Evaluacion De Corte</h4>
-                                {dataEvaluacionCorte.map((filaEvaluacionCorte) =>
-                                (
-                                    <label key={filaEvaluacionCorte.evaluacion}>{filaEvaluacionCorte.evaluacion}</label>
-                                ))}
-                            </div>   
-                            <div className="container-info-general">
-                                <h4>Color Grasa</h4>
-                                {dataColorGrasa.map((filaColorGrasa) =>
-                                (
-                                    <label key={filaColorGrasa.color}>{filaColorGrasa.color}</label>
-                                ))}
-                            </div> 
-                            <div className="container-info-general">
-                                <h4>Color Carne</h4>
-                                {dataColorCarne.map((filaColorCarne) =>
-                                (
-                                    <label key={filaColorCarne.color}>{filaColorCarne.color}</label>
-                                ))}
+                            <div className="container-textbox-pedidos">
+                                <div className="container-textbox">
+                                    <input type="number" min="1" pattern="^[0-9]+" className="textbox-genegal" name="cantidad" onChange={handelChangeCliente} required/>
+                                    <label>Cantidad</label>
+                                </div>
+                                <div className="container-textbox">
+                                    <input type="number" step="any" min="0.1" className="textbox-genegal" name="valor" onChange={handelChangeCliente} required/>
+                                    <label>Valor</label>
+                                </div>
                             </div>
-                            <div className="container-info-general">
-                                <h4>Marmoreado</h4>
-                                {dataMarmoreado.map((filaMarmoreado) =>
-                                (
-                                    <label key={filaMarmoreado.marmoreado}>{filaMarmoreado.marmoreado}</label>
-                                ))}
-                            </div>  
-                                        
-                        </div>
-                        <div>
-                            <label>Descripcion del producto</label>
-                            <textarea cols="30" rows="5" name="descripcion" onChange={handelChangeCliente} className="textbox-genegal textarea-general" required></textarea>
-                        </div>
-                        <div>
-                            <div className="form-group">
-                                <input type="search" className="textbox-genegal textbox-buscar" autoComplete="off" name="localidad" onChange={handelChangeCliente} onClick={mostrarLocalidad} onBlur={fueraDeFoco} value={form.localidad} placeholder="Localidad" required/>
-                                <UilSearch size="20" className="input-icon"/>
+                            <div className="container-btn-enviar">
+                                <motion.input
+                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                    whileTap={{ scale: 0.9 }} 
+                                    type="submit" className="btn-primario btn-general" value="Enviar Pedido"
+                                />
                             </div>
-                            <div className={activoLocalidad}>
-                                {dataLocalidades.map((filaLocalidades) =>
-                                (
-                                    <button className="btn-tabla-buscar" type="button" onClick={()=>completarLocalidad(filaLocalidades.nombre, filaLocalidades.id)} key={filaLocalidades.id}>{filaLocalidades.nombre}</button>
-                                ))}
-                            </div>                          
-                        </div>
-                        <div className="container-textbox-pedidos">
-                            <div className="container-textbox">
-                                <input type="number" min="1" pattern="^[0-9]+" className="textbox-genegal" name="cantidad" onChange={handelChangeCliente} required/>
-                                <label>Cantidad</label>
-                            </div>
-                            <div className="container-textbox">
-                                <input type="number" step="any" min="0.1" className="textbox-genegal" name="valor" onChange={handelChangeCliente} required/>
-                                <label>Valor</label>
-                            </div>
-                        </div>
-                        <div className="container-btn-enviar">
-                            <input type="submit" className="btn-primario btn-general" value="Enviar Pedido"/>
-                        </div>
-                    </form>
-                </main>
+                        </form>
+                </motion.main>
             </article>
         )
     return(

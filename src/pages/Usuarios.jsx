@@ -6,6 +6,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
 import Cookies from 'universal-cookie'
 import { UilTrash, UilEditAlt } from '@iconscout/react-unicons'
 import Loading from '../components/Loading/Loading'
+import { motion } from 'framer-motion'
 
 const cookies = new Cookies
 
@@ -130,14 +131,14 @@ const Usuarios = () =>
     {
         Swal.fire(
         {
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: '¿Está seguro?',
+            text: "¿Está seguro que quiere eliminar este usuario?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => 
+            confirmButtonText: 'Si, eliminar'
+        }).then((result) =>
         {
             if(result.isConfirmed) 
             {
@@ -217,77 +218,98 @@ const Usuarios = () =>
             console.error(error)
         }
     }
+    
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
 
     if(!loading)
         return(
             <article>
                 <Navegacion texto="Usuarios" volver="/menu"/>
-                <main className="container-abm">
-                    <form className="container-form-abm container-login" onSubmit={handelSubmit}>
-                        <h2>Editar Usuarios</h2>
-                        <div className="container-textbox">
-                            <input type="text" value={form.nombre} className="textbox-genegal" name="nombre" onChange={handelChange} required/>
-                            <label>Nombre Apellido</label>
-                        </div>
-                        <div className="container-textbox">
-                            <input type="email" value={form.mail} className="textbox-genegal" name="mail" onChange={handelChange} required/>
-                            <label>E-mail</label>
-                        </div>
-                        <div>
-                            <label>Seleccionar privilegios del usuario:</label>
-                            <select value={form.permisos} className="textbox-genegal" name="permisos" onChange={handelChange} required>
-                                <option value="estandar">Estandar</option>
-                                <option value="admin">Administrador</option>
-                            </select>
-                        </div>
-                        <label className="text-error">{MensajeError}</label>
-                        <input type="submit" value="Editar" className="btn-primario btn-general"/>
-                    </form>
-                    <div className="container-tabla">
-                        <div className="tbl-header">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th className="th-usuario-nombre">
-                                            <span>Nombre Apellido</span>
-                                        </th>
-                                        <th className="th-usuario-mail">
-                                            <span>E-Mail</span>
-                                        </th>
-                                        <th className="th-permisos">
-                                            <span>Permisos</span>
-                                        </th>
-                                        <th className="th-btn">
-                                            <span>Controles</span>   
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div> 
-                        <div className="tbl-content-completo">
-                            <table>
-                                <tbody>
-                                    {data.map((fila) =>
-                                    (
-                                        <tr key={fila.id}>
-                                            <td className="td-usuario-nombre">{fila.nombre}</td>
-                                            <td className="td-usuario-mail">{fila.mail}</td>
-                                            <td className="td-permisos">{fila.permisos}</td>
-                                            <td className="td-btn">
-                                                <button type="button" className="btn-table-eliminar" onClick={() =>handelEliminar(fila.id)}>
-                                                    <UilTrash size="20"/>
-                                                </button>
-                                                <button type="button" className="btn-table-editar" onClick={() =>handelEditar(fila.id)}>
-                                                    <UilEditAlt size="20"/>
-                                                </button>
-                                            </td>
+                <motion.main
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ duration: 0.5 }}
+                    variants={variants}  
+                    className="container-abm">
+                        <form className="container-form-abm container-login" onSubmit={handelSubmit}>
+                            <h2>Editar Usuarios</h2>
+                            <div className="container-textbox">
+                                <input type="text" value={form.nombre} className="textbox-genegal" name="nombre" onChange={handelChange} required/>
+                                <label>Nombre Apellido</label>
+                            </div>
+                            <div className="container-textbox">
+                                <input type="email" value={form.mail} className="textbox-genegal" name="mail" onChange={handelChange} required/>
+                                <label>E-mail</label>
+                            </div>
+                            <div>
+                                <label>Seleccionar privilegios del usuario:</label>
+                                <select value={form.permisos} className="textbox-genegal" name="permisos" onChange={handelChange} required>
+                                    <option value="estandar">Estandar</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                            </div>
+                            <label className="text-error">{MensajeError}</label>
+                            <motion.input
+                                whileHover={{ backgroundColor: '#88a4ff' }}
+                                whileTap={{ scale: 0.9 }}    
+                                type="submit" value="Editar" className="btn-primario btn-general"
+                            />
+                        </form>
+                        <div className="container-tabla">
+                            <div className="tbl-header">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th className="th-usuario-nombre">
+                                                <span>Nombre Apellido</span>
+                                            </th>
+                                            <th className="th-usuario-mail">
+                                                <span>E-Mail</span>
+                                            </th>
+                                            <th className="th-permisos">
+                                                <span>Permisos</span>
+                                            </th>
+                                            <th className="th-btn">
+                                                <span>Controles</span>   
+                                            </th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>   
-                        </div>  
-                    </div>
-                </main>
+                                    </thead>
+                                </table>
+                            </div> 
+                            <div className="tbl-content-completo">
+                                <table>
+                                    <tbody>
+                                        {data.map((fila) =>
+                                        (
+                                            <tr key={fila.id}>
+                                                <td className="td-usuario-nombre">{fila.nombre}</td>
+                                                <td className="td-usuario-mail">{fila.mail}</td>
+                                                <td className="td-permisos">{fila.permisos}</td>
+                                                <td className="td-btn">
+                                                    <motion.button 
+                                                        whileHover={{ scale: 1.1 }}
+                                                        whileTap={{ scale: 0.9 }}  
+                                                        type="button" className="btn-table-eliminar" onClick={() =>handelEliminar(fila.id)}>
+                                                            <UilTrash size="20"/>
+                                                    </motion.button>
+                                                    <motion.button
+                                                        whileHover={{ scale: 1.1 }}
+                                                        whileTap={{ scale: 0.9 }}   
+                                                        type="button" className="btn-table-editar" onClick={() =>handelEditar(fila.id)}>
+                                                            <UilEditAlt size="20"/>
+                                                    </motion.button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>   
+                            </div>  
+                        </div>
+                </motion.main>
             </article>
         )
     return(

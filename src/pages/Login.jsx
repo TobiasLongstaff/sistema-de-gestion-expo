@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import '../styles/login.css'
 import Cookies from 'universal-cookie'
 import url from '../services/Settings'
+import { motion } from 'framer-motion'
 
 const cookies = new Cookies
 
@@ -68,24 +69,46 @@ const Login = () =>
         console.log(form)
     }
 
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+
     return(
         <article className="back-login">
-            <main className="container-login">
-                <header className="header-login">
-                    <h1>Iniciar sesión</h1>
-                </header>
-                <form className="menu-login" onSubmit={handelSubmit}>
-                    <input type="email" placeholder="E-mail" name="mail" onChange={handelChange} value={form.mail} className="textbox-genegal" required />
-                    <input type="password" placeholder="Contraseña" name="password" onChange={handelChange} value={form.password} className="textbox-genegal" required/>
-                    <label className="text-error">{MensajeError}</label>
-                    <div className="container-btn">
-                        <button type="submit" className="btn-primario btn-general">Iniciar sesión</button>
-                        <Link to="/registrarse">
-                            <button type="button" className="btn-general">Crear cuenta</button>
-                        </Link>                    
-                    </div>
-                </form>
-            </main>                
+            <motion.main
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.5 }}
+                variants={variants} 
+                className="container-login">
+                    <header className="header-login">
+                        <h1>Iniciar sesión</h1>
+                    </header>
+                    <form className="menu-login" onSubmit={handelSubmit}>
+                        <div className="container-textbox">
+                            <input type="email" name="mail" onChange={handelChange} value={form.mail} className="textbox-genegal" required />
+                            <label>E-mail</label>
+                        </div>
+                        <div className="container-textbox">
+                            <input type="password" name="password" onChange={handelChange} value={form.password} className="textbox-genegal" required/>
+                            <label>Contraseña</label>
+                        </div>
+                        <label className="text-error">{MensajeError}</label>
+                        <div className="container-btn">
+                            <motion.button type="submit"
+                                whileHover={{ backgroundColor: '#88a4ff' }}
+                                whileTap={{ scale: 0.9 }}  
+                                className="btn-primario btn-general">
+                                    Iniciar sesión
+                            </motion.button>
+                            <Link to="/registrarse">
+                                <button type="button" className="btn-general">Crear cuenta</button>
+                            </Link>                    
+                        </div>
+                    </form>
+            </motion.main>                
         </article>   
     )
 }

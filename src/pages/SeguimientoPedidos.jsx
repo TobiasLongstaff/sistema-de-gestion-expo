@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 import url from '../services/Settings'
 import Loading from '../components/Loading/Loading'
+import { motion } from 'framer-motion'
 
 const cookies = new Cookies
 
@@ -44,50 +45,61 @@ const SeguimientoPedidos = () =>
         }
     }
 
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+
     if(idsession)
         return(
             <article>
                 <Navigation texto="Seguimiento de Pedidos" volver="/menu"/>
-                <main className="container-seguimiento-pedidos">
-                    <div className="tbl-header">
-                        <table>
-                            <thead>
-                                <tr className="tr-head">
-                                    <th className="th-id">#</th>
-                                    <th className="th-cliente">Cliente</th>
-                                    <th className="th-categoria">Categoria</th>
-                                    <th className="th-localidad">Localidad</th>
-                                    <th className="th-cantidad">Cantidad</th>
-                                    <th className="th-valor">Valor</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <div className="tbl-content-completo">
-                        <table>
-                            <tbody>
-                                { loading ? (
-                                    <tr className="tr-load">
-                                        <td><div className="loader">Loading...</div></td>
+                <motion.main
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ duration: 0.5 }}
+                    variants={variants}  
+                    className="container-seguimiento-pedidos">
+                        <div className="tbl-header">
+                            <table>
+                                <thead>
+                                    <tr className="tr-head">
+                                        <th className="th-id">#</th>
+                                        <th className="th-cliente">Cliente</th>
+                                        <th className="th-categoria">Categoria</th>
+                                        <th className="th-localidad">Localidad</th>
+                                        <th className="th-cantidad">Cantidad</th>
+                                        <th className="th-valor">Valor</th>
                                     </tr>
-                                    ): (
-                                        data.map((fila) =>
-                                        (
-                                            <tr key={fila.id} className="tr-web">
-                                                <td className="td-id">{fila.id}</td>
-                                                <td className="td-cliente">{fila.cliente}</td>
-                                                <td className="td-categoria"><p>{fila.categoria}</p></td>
-                                                <td className="td-localidad"><p>{fila.localidad}</p></td>
-                                                <td className="td-cantidad">{fila.cantidad}</td>
-                                                <td className="td-valor">{fila.valor}</td>
-                                            </tr>
-                                        ))
-                                    )
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </main>
+                                </thead>
+                            </table>
+                        </div>
+                        <div className="tbl-content-completo">
+                            <table>
+                                <tbody>
+                                    { loading ? (
+                                        <tr className="tr-load">
+                                            <td><div className="loader">Loading...</div></td>
+                                        </tr>
+                                        ): (
+                                            data.map((fila) =>
+                                            (
+                                                <tr key={fila.id} className="tr-web">
+                                                    <td className="td-id">{fila.id}</td>
+                                                    <td className="td-cliente">{fila.cliente}</td>
+                                                    <td className="td-categoria"><p>{fila.categoria}</p></td>
+                                                    <td className="td-localidad"><p>{fila.localidad}</p></td>
+                                                    <td className="td-cantidad">{fila.cantidad}</td>
+                                                    <td className="td-valor">{fila.valor}</td>
+                                                </tr>
+                                            ))
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                </motion.main>
             </article>
         )
     return(

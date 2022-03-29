@@ -22,101 +22,112 @@ const Menu = () =>
         }
     })
 
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+
     if(idsession)
         return(
-            <motion.article>
+            <article>
                 <Navigation texto="Menu"/>
                 <div className="container-web-menu">
-                    <main className="container-menu">
-                        <Link to="/pedidos">
-                            <motion.button 
-                                whileHover={{ backgroundColor: '#88a4ff' }}
-                                whileTap={{ scale: 0.9 }}
-                                type="button" className="btn-general-menu">
-                                <h3>
-                                    Pedidos
-                                </h3>
-                            </motion.button>
-                        </Link>
-                        <Link to="/reclamos">
-                            <motion.button 
-                                whileHover={{ backgroundColor: '#88a4ff' }}
-                                whileTap={{ scale: 0.9 }}
-                                type="button" className="btn-general-menu">
-                                <h3>
-                                    Reclamos
-                                </h3>
-                            </motion.button >
-                        </Link>
-                        <Link to="/seguimiento-de-pedidos">
-                            <motion.button 
-                                whileHover={{ backgroundColor: '#88a4ff' }}
-                                whileTap={{ scale: 0.9 }}
-                                type="button" className="btn-general-menu">
-                                <h3>
-                                    Seguimiento de pedidos
-                                </h3>
-                            </motion.button>
-                        </Link>
-                        <Link to="/seguimiento-de-reclamos">
-                            <motion.button 
-                                whileHover={{ backgroundColor: '#88a4ff' }}
-                                whileTap={{ scale: 0.9 }} 
-                                type="button" className="btn-general-menu">
-                                <h3>
-                                    Seguimiento de reclamos
-                                </h3>
-                            </motion.button>
-                        </Link>
-                        {(() =>{ 
-                            if(tipo == 'admin') 
-                            {
-                                return(
-                                    <>
-                                        <Link to="/clientes">
-                                            <motion.button 
-                                                whileHover={{ backgroundColor: '#88a4ff' }}
-                                                whileTap={{ scale: 0.9 }} 
-                                                type="button" className="btn-general-menu">
-                                                <h3>
-                                                    ABM Clientes
-                                                </h3>
-                                            </motion.button>
-                                        </Link>
-                                        {/* <Link to="/colores">
-                                            <button type="button" className="btn-general-menu">
-                                                <h3>
-                                                    ABM Colores
-                                                </h3>
-                                            </button>
-                                        </Link> */}
-                                        <Link to="/localidades">
-                                            <motion.button 
-                                                whileHover={{ backgroundColor: '#88a4ff' }}
-                                                whileTap={{ scale: 0.9 }} 
-                                                type="button" className="btn-general-menu">
-                                                <h3>
-                                                    ABM Localidades
-                                                </h3>
-                                            </motion.button>
-                                        </Link>
-                                        <Link to="/usuarios">
-                                            <motion.button 
-                                                whileHover={{ backgroundColor: '#88a4ff' }}
-                                                whileTap={{ scale: 0.9 }}
-                                                type="button" className="btn-general-menu">
-                                                <h3>
-                                                    Usuarios
-                                                </h3>
-                                            </motion.button>
-                                        </Link>
-                                    </>
-                                )
-                            }
-                        })()}
-                    </main>
+                    <motion.main
+                        initial="hidden"
+                        animate="visible"
+                        transition={{ duration: 0.5 }}
+                        variants={variants} 
+                        className="container-menu">
+                            <Link to="/pedidos">
+                                <motion.button 
+                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                    whileTap={{ scale: 0.9 }}
+                                    type="button" className="btn-general-menu">
+                                    <h3>
+                                        Pedidos
+                                    </h3>
+                                </motion.button>
+                            </Link>
+                            <Link to="/reclamos">
+                                <motion.button 
+                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                    whileTap={{ scale: 0.9 }}
+                                    type="button" className="btn-general-menu">
+                                    <h3>
+                                        Reclamos
+                                    </h3>
+                                </motion.button >
+                            </Link>
+                            <Link to="/seguimiento-de-pedidos">
+                                <motion.button 
+                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                    whileTap={{ scale: 0.9 }}
+                                    type="button" className="btn-general-menu">
+                                    <h3>
+                                        Seguimiento de pedidos
+                                    </h3>
+                                </motion.button>
+                            </Link>
+                            <Link to="/seguimiento-de-reclamos">
+                                <motion.button 
+                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                    whileTap={{ scale: 0.9 }} 
+                                    type="button" className="btn-general-menu">
+                                    <h3>
+                                        Seguimiento de reclamos
+                                    </h3>
+                                </motion.button>
+                            </Link>
+                            {(() =>{ 
+                                if(tipo == 'admin') 
+                                {
+                                    return(
+                                        <>
+                                            <Link to="/clientes">
+                                                <motion.button 
+                                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                                    whileTap={{ scale: 0.9 }} 
+                                                    type="button" className="btn-general-menu">
+                                                    <h3>
+                                                        ABM Clientes
+                                                    </h3>
+                                                </motion.button>
+                                            </Link>
+                                            {/* <Link to="/colores">
+                                                <button type="button" className="btn-general-menu">
+                                                    <h3>
+                                                        ABM Colores
+                                                    </h3>
+                                                </button>
+                                            </Link> */}
+                                            <Link to="/localidades">
+                                                <motion.button 
+                                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                                    whileTap={{ scale: 0.9 }} 
+                                                    type="button" className="btn-general-menu">
+                                                    <h3>
+                                                        ABM Localidades
+                                                    </h3>
+                                                </motion.button>
+                                            </Link>
+                                            <Link to="/usuarios">
+                                                <motion.button 
+                                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                    type="button" className="btn-general-menu">
+                                                    <h3>
+                                                        Usuarios
+                                                    </h3>
+                                                </motion.button>
+                                            </Link>
+                                        </>
+                                    )
+                                }
+                            })()}
+                    </motion.main>
                 </div>
-            </motion.article>
+            </article>
         )
     return(
         <Loading/>

@@ -8,6 +8,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
 import { useDropzone } from 'react-dropzone'
 import { useNavigate } from 'react-router-dom'
 import Loading from '../components/Loading/Loading'
+import { motion } from 'framer-motion'
 
 const cookies = new Cookies
 
@@ -175,13 +176,13 @@ const Reclamos = () =>
         e.preventDefault()
         Swal.fire(
         {
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: '¿Está seguro?',
+            text: "¿Está seguro que quiere enviar este reclamo?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Si, enviar!'
         }).then((result) => 
         {
             if(result.isConfirmed) 
@@ -193,6 +194,7 @@ const Reclamos = () =>
             }
         })
     }
+
 
     const crearReclamos = async () =>
     {
@@ -309,95 +311,110 @@ const Reclamos = () =>
         })
     }
 
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+
     if(idsession)
         return(
             <article>
                 <Navigation texto="Reclamos" volver="/menu"/>
-                <main className="container-pedidos">
-                    <form ref={formReclamos} className="form-reclamos" onSubmit={handelSubmit}>
-                        <div>
-                            <span>Fecha del Reclamo</span>
-                            <input type="date" name="fechaReclamo" value={fechaActual} className="textbox-genegal" onChange={handelChange} required disabled/>                        
-                        </div>
-                        <div>
-                            <span>Fecha de recepción de la mercadería</span>
-                            <input type="date" max={fechaActual} name="fechaRecepcion" value={form.fechaRecepcion} className="textbox-genegal" onChange={handelChange} required />                        
-                        </div>
-                        <div>
-                            <div className="form-group">
-                                <input type="search" className="textbox-genegal textbox-buscar" autoComplete="off" name="cliente" onClick={mostrarClientes} onChange={handelChangeCliente} onBlur={fueraDeFoco} value={form.cliente} placeholder="Cliente" required="" />
-                                <UilSearch size="20" className="input-icon"/>                        
+                <motion.main
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ duration: 0.5 }}
+                    variants={variants} 
+                    className="container-pedidos">
+                        <form ref={formReclamos} className="form-reclamos" onSubmit={handelSubmit}>
+                            <div>
+                                <span>Fecha del Reclamo</span>
+                                <input type="date" name="fechaReclamo" value={fechaActual} className="textbox-genegal" onChange={handelChange} required disabled/>                        
                             </div>
-                            <div className={activoCliente}>
-                                {data.map((fila) =>
-                                (
-                                    <button className="btn-tabla-buscar" type="button" onClick={()=>completarCliente(fila.nombre_apellido, fila.id)} key={fila.id}>{fila.nombre_apellido}</button>
-                                ))}
-                            </div>                          
-                        </div>
-                        <div>
-                            <span>Observaciones</span>
-                            <textarea className="textbox-genegal textarea-general" name="observacion" onChange={handelChange} rows="5" cols="30" required></textarea>                        
-                        </div>
-                        <div>
-                            <span>Categoría del reclamo o motivo</span>
-                            <div className="conteiner-select">
-                                <select className="textbox-genegal selectbox-general" onChange={handelChange} name="categoria" size="10" required>
-                                    <option value="Calidad">Calidad</option>
-                                    <option value="Descuento por Pago de Contado">Descuento por Pago de Contado</option>
-                                    <option value="Diferencia en el Kilaje">Diferencia en el Kilaje</option>
-                                    <option value="Diferencia en el Precio">Diferencia en el Precio</option>
-                                    <option value="Error de Etiquetado">Error de Etiquetado</option>
-                                    <option value="Error Documental Facturación">Error Documental Facturación</option>
-                                    <option value="Faltante de Mercadería">Faltante de Mercadería</option>
-                                    <option value="Llegada fuera de Horario">Llegada fuera de Horario</option>
-                                    <option value="Pedido Erroneo">Pedido Erroneo</option>
-                                    <option value="Acuerdo Comercial">Acuerdo Comercial</option>
-                                </select>
-                                <select ref={motivo} className="textbox-genegal selectbox-general-2" onChange={handelChange} name="motivo" size="7" required disabled>
-                                    <option value="Calidad Especifica">Calidad Especifica</option>
-                                    <option value="Color">Color</option>
-                                    <option value="Estado">Estado</option>
-                                    <option value="Golpe">Golpe</option>
-                                    <option value="Grasa">Grasa</option>
-                                    <option value="Packaging">Packaging</option>
-                                    <option value="Vencimiento">Vencimiento</option>
-                                </select>                            
+                            <div>
+                                <span>Fecha de recepción de la mercadería</span>
+                                <input type="date" max={fechaActual} name="fechaRecepcion" value={form.fechaRecepcion} className="textbox-genegal" onChange={handelChange} required />                        
                             </div>
-                        </div>
-                        <div className="dropzone" {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            {
-                                isDragActive ?
-                                <p>Drop the files here ...</p> :
-                                <>
-                                    <p className="dropzone-p">Agregue un archivo</p>
-                                    <p>o suelte archivos aquí</p>
-                                </>
-                            }
-                        </div>
-                        <div>
-                            {imagenes.map((filaImagenes, i) =>
-                            (
-                                <div key={i}>                     
-                                    <div className="container-row-archivo">
-                                        <div className="container-text-archivo">
-                                            <UilPaperclip size="20" color="#4d76fd"/>
-                                            <p>{filaImagenes.nombre}</p>
-                                        </div>
-                                        <button type="button" className="btn-eliminar-archivo" onClick={()=> eliminarImagen(i)}>
-                                            <UilTimes size="20" color="#4d76fd"/>
-                                        </button>
-                                    </div>
-                                    <progress value="100" max="100" className="progress-archivo"></progress>
+                            <div>
+                                <div className="form-group">
+                                    <input type="search" className="textbox-genegal textbox-buscar" autoComplete="off" name="cliente" onClick={mostrarClientes} onChange={handelChangeCliente} onBlur={fueraDeFoco} value={form.cliente} placeholder="Cliente" required="" />
+                                    <UilSearch size="20" className="input-icon"/>                        
                                 </div>
-                            ))}
-                        </div>
-                        <div className="conteiner-btn">
-                            <input ref={btnForm} type="submit" className="btn-primario btn-general" value="Enviar"/>   
-                        </div>
-                    </form>
-                </main>
+                                <div className={activoCliente}>
+                                    {data.map((fila) =>
+                                    (
+                                        <button className="btn-tabla-buscar" type="button" onClick={()=>completarCliente(fila.nombre_apellido, fila.id)} key={fila.id}>{fila.nombre_apellido}</button>
+                                    ))}
+                                </div>                          
+                            </div>
+                            <div>
+                                <span>Observaciones</span>
+                                <textarea className="textbox-genegal textarea-general" name="observacion" onChange={handelChange} rows="5" cols="30" required></textarea>                        
+                            </div>
+                            <div>
+                                <span>Categoría del reclamo o motivo</span>
+                                <div className="conteiner-select">
+                                    <select className="textbox-genegal selectbox-general" onChange={handelChange} name="categoria" size="10" required>
+                                        <option value="Calidad">Calidad</option>
+                                        <option value="Descuento por Pago de Contado">Descuento por Pago de Contado</option>
+                                        <option value="Diferencia en el Kilaje">Diferencia en el Kilaje</option>
+                                        <option value="Diferencia en el Precio">Diferencia en el Precio</option>
+                                        <option value="Error de Etiquetado">Error de Etiquetado</option>
+                                        <option value="Error Documental Facturación">Error Documental Facturación</option>
+                                        <option value="Faltante de Mercadería">Faltante de Mercadería</option>
+                                        <option value="Llegada fuera de Horario">Llegada fuera de Horario</option>
+                                        <option value="Pedido Erroneo">Pedido Erroneo</option>
+                                        <option value="Acuerdo Comercial">Acuerdo Comercial</option>
+                                    </select>
+                                    <select ref={motivo} className="textbox-genegal selectbox-general-2" onChange={handelChange} name="motivo" size="7" required disabled>
+                                        <option value="Calidad Especifica">Calidad Especifica</option>
+                                        <option value="Color">Color</option>
+                                        <option value="Estado">Estado</option>
+                                        <option value="Golpe">Golpe</option>
+                                        <option value="Grasa">Grasa</option>
+                                        <option value="Packaging">Packaging</option>
+                                        <option value="Vencimiento">Vencimiento</option>
+                                    </select>                            
+                                </div>
+                            </div>
+                            <div className="dropzone" {...getRootProps()}>
+                                <input {...getInputProps()} />
+                                {
+                                    isDragActive ?
+                                    <p>Drop the files here ...</p> :
+                                    <>
+                                        <p className="dropzone-p">Agregue un archivo</p>
+                                        <p>o suelte archivos aquí</p>
+                                    </>
+                                }
+                            </div>
+                            <div>
+                                {imagenes.map((filaImagenes, i) =>
+                                (
+                                    <div key={i}>                     
+                                        <div className="container-row-archivo">
+                                            <div className="container-text-archivo">
+                                                <UilPaperclip size="20" color="#4d76fd"/>
+                                                <p>{filaImagenes.nombre}</p>
+                                            </div>
+                                            <button type="button" className="btn-eliminar-archivo" onClick={()=> eliminarImagen(i)}>
+                                                <UilTimes size="20" color="#4d76fd"/>
+                                            </button>
+                                        </div>
+                                        <progress value="100" max="100" className="progress-archivo"></progress>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="conteiner-btn">
+                                <motion.input
+                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                    whileTap={{ scale: 0.9 }}  
+                                    ref={btnForm} type="submit" className="btn-primario btn-general" value="Enviar"
+                                />   
+                            </div>
+                        </form>
+                </motion.main>
             </article>
 
         )

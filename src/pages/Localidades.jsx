@@ -7,6 +7,7 @@ import Cookies from 'universal-cookie'
 import { UilTrash, UilEditAlt } from '@iconscout/react-unicons'
 import { useNavigate } from 'react-router-dom'
 import Loading from '../components/Loading/Loading'
+import { motion } from 'framer-motion'
 
 const cookies = new Cookies
 
@@ -138,13 +139,13 @@ const Localidades = () =>
     {
         Swal.fire(
         {
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: '¿Está seguro?',
+            text: "¿Está seguro que quiere eliminar esta localidad?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Si, eliminar!'
         }).then((result) => 
         {
             if(result.isConfirmed) 
@@ -221,11 +222,22 @@ const Localidades = () =>
         }
     }
 
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+
     if(!loading)
         return(
             <article>
                 <Navegacion texto="ABM Localidades" volver="/menu"/>
-                <main className="container-abm">
+                <motion.main
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ duration: 0.5 }}
+                    variants={variants}   
+                    className="container-abm">
                     <form className="container-form-abm container-login" onSubmit={handelSubmit}>
                         <h2>Agregar Localidad</h2>
                         <div className="container-textbox">
@@ -233,7 +245,11 @@ const Localidades = () =>
                             <label>Nombre</label>
                         </div>
                         <label className="text-error">{MensajeError}</label>
-                        <input type="submit" style={{ background: btnForm}} value={btn_value} className="btn-primario btn-general"/>
+                        <motion.input
+                            whileHover={{ backgroundColor: '#88a4ff' }}
+                            whileTap={{ scale: 0.9 }}   
+                            type="submit" style={{ background: btnForm}} value={btn_value} className="btn-primario btn-general"
+                        />
                     </form>
                     <div className="container-tabla">
                         <div className="tbl-header">
@@ -258,12 +274,18 @@ const Localidades = () =>
                                         <tr key={fila.id}>
                                             <td className="td-nombre-usuario">{fila.nombre}</td>
                                             <td className="td-btn">
-                                                <button type="button" className="btn-table-eliminar" onClick={() =>handelEliminar(fila.id)}>
-                                                    <UilTrash size="20"/>
-                                                </button>
-                                                <button type="button" className="btn-table-editar" onClick={() =>handelEditar(fila.id)}>
-                                                    <UilEditAlt size="20"/>
-                                                </button>
+                                                <motion.button
+                                                    whileHover={{ scale: 1.1 }}
+                                                    whileTap={{ scale: 0.9 }}  
+                                                    type="button" className="btn-table-eliminar" onClick={() =>handelEliminar(fila.id)}>
+                                                        <UilTrash size="20"/>
+                                                </motion.button>
+                                                <motion.button
+                                                    whileHover={{ scale: 1.1 }}
+                                                    whileTap={{ scale: 0.9 }}  
+                                                    type="button" className="btn-table-editar" onClick={() =>handelEditar(fila.id)}>
+                                                        <UilEditAlt size="20"/>
+                                                </motion.button>
                                             </td>
                                         </tr>
                                     ))}
@@ -271,7 +293,7 @@ const Localidades = () =>
                             </table>   
                         </div>  
                     </div>
-                </main>
+                </motion.main>
             </article>
         )
     return(

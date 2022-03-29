@@ -230,7 +230,7 @@
                                         <h2 style="color: #7D7D7D;">'.$nombre_apellido.'</h2>    
                                         <h2 style="color: #7D7D7D;">'.$mail_cliente.'</h2>            
                                     </div>
-                                    <a style="color: #ffffff;" href="https://'.$nombre.'/aprobar-usuario/'.$mail_cliente.'/'.$hash.'/'.$nombre_apellido.'">Activar cuenta</a>                 
+                                    <a style="color: #ffffff;" href="https://'.$nombre.'/aprobar-usuarios/'.$mail_cliente.'/'.$hash.'/'.$nombre_apellido.'">Activar cuenta</a>                 
                                 </div>
                             </div>
                         </body>';

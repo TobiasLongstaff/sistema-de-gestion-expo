@@ -5,6 +5,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.all.min.js'
 import url from '../services/Settings'
 import { useNavigate } from 'react-router-dom'
 import Loading from '../components/Loading/Loading'
+import { motion } from 'framer-motion'
 
 const cookies = new Cookies
 
@@ -124,13 +125,13 @@ const Cuenta = () =>
         e.preventDefault()
         Swal.fire(
         {
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: '¿Está seguro?',
+            text: "¿Está seguro que quiere actualizar su contraseña?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Si, actualizar!'
         }).then((result) => 
         {
             if(result.isConfirmed) 
@@ -192,45 +193,63 @@ const Cuenta = () =>
         }
     }
 
+    const variants = 
+    {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+
     if(idsession)
         return(
             <article>
                 <Navigation texto="Mi Cuenta" volver="/menu"/>
-                <main>
-                    <form className="form-reclamos" onSubmit={handelSubmit}>
-                        <label>Nombre Apellido: {cookies.get('nombre')}</label>
-                        <label>E-Mail: {cookies.get('mail')}</label>
-                        <label>Perimisos: {cookies.get('tipo')}</label>
-                        <div className="container-textbox">
-                            <input type="password" name="password" onChange={handelChange} value={form.password} className="textbox-genegal" required/>
-                            <label>Contraseña</label>
-                        </div>
-                        <div className="container-textbox">
-                            <input type="password" name="password_con" onChange={handelChange} value={form.password_con} className="textbox-genegal" required/>
-                            <label>Confirmar Contraseña</label>
-                        </div>
-                        <div className="conteiner-btn">
-                            <input type="submit" className="btn-primario btn-general" value="Enviar"/>   
-                        </div>
-                    </form>
-                    {(() =>{ 
-                        if(tipo == 'admin') 
-                        {
-                            return(
-                                <form className="form-reclamos" onSubmit={handelSubmitMail}>
-                                    <p>Actualizar E-Mail al cual se envian los pedidos y reclamos</p>
-                                    <div className="container-textbox">
-                                        <input type="email" name="mail" onChange={handelChangeMail} value={formMail.mail} className="textbox-genegal" required/>
-                                        <label>E-Mail</label>
-                                    </div>
-                                    <div className="conteiner-btn">
-                                        <input type="submit" className="btn-primario btn-general" value="Actualizar"/>   
-                                    </div>
-                                </form>
-                            )
-                        }
-                    })()}
-                </main>
+                <motion.main
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ duration: 0.5 }}
+                    variants={variants}>
+                        <form className="form-reclamos" onSubmit={handelSubmit}>
+                            <label>Nombre Apellido: {cookies.get('nombre')}</label>
+                            <label>E-Mail: {cookies.get('mail')}</label>
+                            <label>Perimisos: {cookies.get('tipo')}</label>
+                            <div className="container-textbox">
+                                <input type="password" name="password" onChange={handelChange} value={form.password} className="textbox-genegal" required/>
+                                <label>Contraseña</label>
+                            </div>
+                            <div className="container-textbox">
+                                <input type="password" name="password_con" onChange={handelChange} value={form.password_con} className="textbox-genegal" required/>
+                                <label>Confirmar Contraseña</label>
+                            </div>
+                            <div className="conteiner-btn">
+                                <motion.input
+                                    whileHover={{ backgroundColor: '#88a4ff' }}
+                                    whileTap={{ scale: 0.9 }}    
+                                    type="submit" className="btn-primario btn-general" value="Enviar"
+                                />   
+                            </div>
+                        </form>
+                        {(() =>{ 
+                            if(tipo == 'admin') 
+                            {
+                                return(
+                                    <form className="form-reclamos" onSubmit={handelSubmitMail}>
+                                        <p>Actualizar E-Mail al cual se envian los pedidos y reclamos</p>
+                                        <div className="container-textbox">
+                                            <input type="email" name="mail" onChange={handelChangeMail} value={formMail.mail} className="textbox-genegal" required/>
+                                            <label>E-Mail</label>
+                                        </div>
+                                        <div className="conteiner-btn">
+                                            <motion.input
+                                                whileHover={{ backgroundColor: '#88a4ff' }}
+                                                whileTap={{ scale: 0.9 }}    
+                                                type="submit" className="btn-primario btn-general" value="Actualizar"
+                                            />   
+                                        </div>
+                                    </form>
+                                )
+                            }
+                        })()}
+                </motion.main>
             </article>
         )
     return(
